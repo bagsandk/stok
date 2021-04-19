@@ -38,7 +38,7 @@
                 </ul>
                 <ul class="navbar-nav navbar-right">
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/<?= $this->session->userdata('pict'); ?>" class="rounded-circle mr-1">
+                            <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/<?= $this->session->userdata('profile'); ?>" class="rounded-circle mr-1">
                             <div class="d-sm-none d-lg-inline-block">Hi, <?php
                                                                             echo $this->session->userdata('first_name')
                                                                             ?></div>
@@ -65,9 +65,14 @@
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header">Menu</li>
-                        <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'administrator') ? 'active' : ''; ?>">
-                            <a class="nav-link" href="<?php echo base_url('administrator/index'); ?>">
+                        <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'guest') ? 'active' : ''; ?>">
+                            <a class="nav-link" href="<?php echo base_url('guest/index'); ?>">
                                 <i class="fas fa-fire"></i> <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'kartu_stok_non_aset') ? 'active' : ''; ?>">
+                            <a class="nav-link" href="<?php echo base_url('kartu_stok_non_aset/index'); ?>">
+                            <i class="fas fa-box-open"></i> <span>Kartu Stok Non Asset</span>
                             </a>
                         </li>
                     </ul>

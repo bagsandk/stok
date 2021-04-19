@@ -66,7 +66,7 @@ CREATE TABLE "kartu_stok_aset" (
   "lokasi" varchar,
   "kondisi" varchar,
   "isWaranty" bool,
-  "productId" varchar
+  "productId" uuid
 );
 
 CREATE TABLE "kartu_stok_non_aset" (
@@ -79,7 +79,7 @@ CREATE TABLE "kartu_stok_non_aset" (
   "saldoMin" int4 NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "productId" varchar
+  "productId" uuid
 );
 
 CREATE TABLE "ksa_kendaraan" (
@@ -113,7 +113,7 @@ CREATE TABLE "kelompok" (
   "namaKelompok" varchar NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "kodeGol" varchar
+  "kodeGol" uuid
 );
 
 CREATE TABLE "sub_kelompok" (
@@ -121,7 +121,7 @@ CREATE TABLE "sub_kelompok" (
   "namaSub" varchar NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "kodeKelompok" varchar
+  "kodeKelompok" uuid
 );
 
 CREATE TABLE "barang" (
@@ -129,7 +129,7 @@ CREATE TABLE "barang" (
   "namaBarang" varchar NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "kodeSub" varchar
+  "kodeSub" uuid
 );
 
 CREATE TABLE "product" (
@@ -141,7 +141,7 @@ CREATE TABLE "product" (
   "deskripsi" varchar NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "kodeBarang" varchar
+  "kodeBarang" uuid
 );
 
 CREATE TABLE "product_kendaraan" (
@@ -153,7 +153,7 @@ CREATE TABLE "product_kendaraan" (
   "hp" varchar NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now()),
-  "productId" varchar
+  "productId" uuid
 );
 
 ALTER TABLE "history" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");

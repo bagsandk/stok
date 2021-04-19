@@ -12,9 +12,29 @@ class Auth extends CI_Controller
 	public function index()
 	{
 		// $params = [
+		// 	'first_name' => 'Super Admin',
+		// 	'last_name' => ' Sandi',
+		// 	'email' => 'su@outlook.com',
+		// 	'password' => md5('123'),
+		// 	'isActive' => 'Yes',
+		// 	'level' => 'Super_Admin',
+		// 	'publish' => 'Yes',
+		// ];
+		// $this->Global_model->insert('users', $params);
+		// $params = [
+		// 	'first_name' => 'Administrator',
+		// 	'last_name' => '.',
+		// 	'email' => 'administrator@outlook.com',
+		// 	'password' => md5('123'),
+		// 	'isActive' => 'Yes',
+		// 	'level' => 'Administrator',
+		// 	'publish' => 'Yes',
+		// ];
+		// $this->Global_model->insert('users', $params);
+		// $params = [
 		// 	'first_name' => 'Guest',
-		// 	'last_name' => 'One',
-		// 	'email' => 'guest.one@gmail.com',
+		// 	'last_name' => '.',
+		// 	'email' => 'guest@outlook.com',
 		// 	'password' => md5('123'),
 		// 	'isActive' => 'Yes',
 		// 	'level' => 'Guest',

@@ -27,22 +27,31 @@
                                   <tbody>
                                       <?php
                                         $no = 1;
-                                        foreach ($produk_ as $t) { ?>
-                                          <tr>
-                                              <td><?php echo $no; ?></td>
-                                              <td><?php echo $t['nama']; ?></td>
-                                              <td><?php echo $t['gambar']; ?></td>
-                                              <td><?php echo $t['merek']; ?></td>
-                                              <td><?php echo $t['satuan']; ?></td>
-                                              <td><?php echo $t['deskripsi']; ?></td>
-                                              <td><?php echo view('barang', ['id' => $t['kodeBarang']], 'namaBarang') ?></td>
-                                              <td>
-                                                  <a href="<?php echo base_url('produk/edit/' . $t['id']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>
-                                                  <a href="<?php echo base_url('produk/remove/' . $t['id']); ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><span class="fa fa-trash"></span></a>
-                                              </td>
-                                          </tr>
+                                        foreach ($produk_ as $t) {
+                                            $kendaraan = $this->db->get_where('product_kendaraan', ['productId' => $t['id']])->row_array();
+                                            $ksna = $this->db->get_where('kartu_stok_non_aset', ['productId' => $t['id']])->row_array();
+                                            $ksa = $this->db->get_where('kartu_stok_aset', ['productId' => $t['id']])->row_array();
+                                            $boolKendaraan = ($kendaraan == null) ? true : false;
+                                            $boolKsna = ($ksna == null) ? true : false;
+                                            $boolKsa = ($ksa == null) ? true : false;
+                                            if ($boolKendaraan == true && $boolKsna == true && $boolKsa == true) {
+                                        ?>
+                                              <tr>
+                                                  <td><?php echo $no; ?></td>
+                                                  <td><?php echo $t['nama']; ?></td>
+                                                  <td><?php echo $t['gambar']; ?></td>
+                                                  <td><?php echo $t['merek']; ?></td>
+                                                  <td><?php echo $t['satuan']; ?></td>
+                                                  <td><?php echo $t['deskripsi']; ?></td>
+                                                  <td><?php echo view('barang', ['id' => $t['kodeBarang']], 'namaBarang') ?></td>
+                                                  <td>
+                                                      <a href="<?php echo base_url('produk/edit/' . $t['id']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>
+                                                      <a href="<?php echo base_url('produk/remove/' . $t['id']); ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><span class="fa fa-trash"></span></a>
+                                                  </td>
+                                              </tr>
                                       <?php
-                                            $no++;
+                                                $no++;
+                                            }
                                         } ?>
                                   </tbody>
                               </table>

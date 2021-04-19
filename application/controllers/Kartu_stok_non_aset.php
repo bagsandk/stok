@@ -1,18 +1,17 @@
 <?php
-class Produk_kendaraan extends CI_Controller
+class Kartu_stok_non_aset extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
-        $this->load->model('Produk_kendaraan_model');
-        $this->load->model('Produk_model');
+        $this->load->model('Kartu_stok_non_aset_model');
         $this->load->model('Barang_model');
     }
     function index()
     {
-        $data['produk_kendaraan_'] = $this->Produk_kendaraan_model->get_all_produk_kendaraan_();
-        $data['_view'] = 'administrator/produk_kendaraan/index';
-        $this->load->view('administrator/layouts/main', $data);
+        $data['kartu_stok_non_aset_'] = $this->Kartu_stok_non_aset_model->get_all_kartu_stok_non_aset_();
+        $data['_view'] = 'guest/kartu_stok_non_aset/index';
+        $this->load->view('guest/layouts/main', $data);
     }
     function add()
     {
@@ -22,11 +21,11 @@ class Produk_kendaraan extends CI_Controller
         $this->form_validation->set_rules('satuan', 'Satuan', 'required|max_length[100]');
         $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|max_length[100]');
         $this->form_validation->set_rules('kodeBarang', 'Kode Barang', 'required|max_length[100]');
-        $this->form_validation->set_rules('tipe', 'Tipe kendaraan', 'required|max_length[100]');
-        $this->form_validation->set_rules('bahanBakar', 'Bahan bakar', 'required|max_length[100]');
-        $this->form_validation->set_rules('thPembuatan', 'Tahun Pembuatan', 'required|max_length[100]');
-        $this->form_validation->set_rules('warna', 'Warna', 'required|max_length[100]');
-        $this->form_validation->set_rules('hp', 'HP', 'required|max_length[100]');
+        $this->form_validation->set_rules('lokasiGudang', 'Lokasi Gedung', 'required|max_length[100]');
+        $this->form_validation->set_rules('lokasiRak', 'Lokasi Rak', 'required|max_length[100]');
+        $this->form_validation->set_rules('jumlahStok', 'Jumlah Stok', 'required|max_length[100]');
+        $this->form_validation->set_rules('hargaRerata', 'Harga Rerata', 'required|max_length[100]');
+        $this->form_validation->set_rules('saldoMin', 'Minimal Saldo', 'required|max_length[100]');
 
         if ($this->form_validation->run()) {
             $params0 = array(
@@ -41,26 +40,32 @@ class Produk_kendaraan extends CI_Controller
             );
             $produk_id = $this->Produk_model->add_produk($params0);
             $params = array(
-                'tipe' => $this->input->post('tipe'),
-                'bahanBakar' => $this->input->post('bahanBakar'),
-                'thPembuatan' => $this->input->post('thPembuatan'),
-                'warna' => $this->input->post('warna'),
-                'hp' => $this->input->post('hp'),
+                'lokasiGudang' => $this->input->post('lokasiGudang'),
+                'lokasiRak' => $this->input->post('lokasiRak'),
+                'satuan' => $this->input->post('satuan'),
+                'jumlahStok' => $this->input->post('jumlahStok'),
+                'hargaRerata' => $this->input->post('hargaRerata'),
+                'saldoMin' => $this->input->post('saldoMin'),
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'productId' => $produk_id,
             );
-            $produk_kendaraan_id = $this->Produk_kendaraan_model->add_produk_kendaraan($params);
-            redirect('produk_kendaraan/index');
+            $in = $this->Kartu_stok_non_aset_model->add_kartu_stok_non_aset($params);
+            if ($in) {
+                alert('success', 'Berhasil...', 'Berhasil menambahkan data');
+            } else {
+                alert('error', 'Gagal...', 'Gagal menambahkan data');
+            }
+            redirect('kartu_stok_non_aset/index');
         } else {
             $data['barang'] = $this->Barang_model->get_all_barang_();
-            $data['_view'] = 'administrator/produk_kendaraan/add';
-            $this->load->view('administrator/layouts/main', $data);
+            $data['_view'] = 'guest/kartu_stok_non_aset/add';
+            $this->load->view('guest/layouts/main', $data);
         }
     }
     function edit($id)
     {
-        $data['produk_kendaraan'] = $this->Produk_kendaraan_model->get_produk_kendaraan($id);
+        $data['kartu_stok_non_aset'] = $this->Kartu_stok_non_aset_model->get_kartu_stok_non_aset($id);
         if (isset($data['produk_kendaraan']['id'])) {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');

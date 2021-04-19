@@ -30,6 +30,7 @@ class Produk extends CI_Controller
                 'deskripsi' => $this->input->post('deskripsi'),
                 'gambar' => '-',
                 'createdAt' => date('Y-m-d H:i:s'),
+                'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeBarang' => $this->input->post('kodeBarang'),
             );
             $produk_id = $this->Produk_model->add_produk($params);

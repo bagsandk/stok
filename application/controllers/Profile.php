@@ -14,11 +14,11 @@ class Profile extends CI_Controller
         $data['user'] = $this->Global_model->get_data('users', ['user_id' => $this->session->userdata('user_id')], false);
         $data['_view'] = 'profile';
         if ($data['user']['level'] == 'Super_Admin') {
-            $this->load->view('administrator/layouts/main', $data);
+            $this->load->view('super_admin/layouts/main', $data);
         } elseif ($data['user']['level'] == 'Administrator') {
             $this->load->view('administrator/layouts/main', $data);
         } elseif ($data['user']['level'] == 'Guest') {
-            $this->load->view('administrator/layouts/main', $data);
+            $this->load->view('guest/layouts/main', $data);
         }
     }
 
