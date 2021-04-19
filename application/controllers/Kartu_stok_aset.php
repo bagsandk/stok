@@ -32,6 +32,11 @@ class Kartu_stok_non_aset extends CI_Controller
         $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
         $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
         }
+        if($this->input->post('isKendaraan') == true){
+        $this->form_validation->set_rules('namaStnk', 'Nama Stnk', 'required|max_length[100]');
+        $this->form_validation->set_rules('alamatStnk', 'Alamat Stnk', 'required|max_length[100]');
+        $this->form_validation->set_rules('peruntukan', 'Peruntukan', 'required|max_length[100]');
+        }
 
         if ($this->form_validation->run()) {
             $params0 = array(
