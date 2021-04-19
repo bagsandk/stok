@@ -98,22 +98,43 @@ class Kartu_stok_non_aset extends CI_Controller
                     'updatedAt' => date('Y-m-d H:i:s'),
                 );
                 $this->Produk_kendaraan_model->update_produk_kendaraan($id, $params);
-                redirect('produk_kendaraan/index');
+                redirect('kartu_stok_non_aset/index');
             } else {
                 $data['barang'] = $this->Barang_model->get_all_barang_();
                 $data['_view'] = 'administrator/produk_kendaraan/edit';
                 $this->load->view('administrator/layouts/main', $data);
             }
-        } else
-            show_error('The produk_kendaraan you are trying to edit does not exist.');
+        } else {
+            alert('error', 'Gagal...', 'Data yang ingin diubah tidak ditemukan');
+            redirect('barang/index');
+            die;
+        }
     }
     function remove($id)
     {
-        $produk_kendaraan = $this->Produk_kendaraan_model->get_produk_kendaraan($id);
-        if (isset($produk_kendaraan['id'])) {
-            $this->Produk_kendaraan_model->delete_produk_kendaraan($id);
-            redirect('produk_kendaraan/index');
-        } else
-            show_error('The produk_kendaraan you are trying to delete does not exist.');
+        $kartu_stok_non_aset = $this->Kartu_stok_non_aset_model->get_kartu_stok_non_aset($id);
+        if (isset($kartu_stok_non_aset['id'])) {
+            $cek = $this->Global_model->get_data('product', ['id' => $kartu_stok_non_aset['productId']], false);
+            if ($cek != null) {
+                $barang_id = $this->Kartu_stok_non_aset_model->delete_kartu_stok_non_aset($id);
+                $product_id = $this->Produk_model->delete_produk($kartu_stok_non_aset['productId']);
+                if ($barang_id && $product_id) {
+                    alert('success', 'Berhasil...', 'Berhasil menghapus data');
+                } else {
+                    alert('error', 'Gagal...', 'Gagal menghapus data');
+                }
+                redirect('barang/index');
+                die;
+            } else {
+                alert('error', 'Gagal...', 'Data yamg ingin dihapus tidak ditemukan');
+                redirect('kartu_stok_non_aset/index');
+                die;
+            }
+            redirect('kartu_stok_non_aset/index');
+        } else {
+            alert('error', 'Gagal...', 'Data yang ingin dihapus tidak ditemukan');
+            redirect('kartu_stok_non_aset/index');
+            die;
+        }
     }
 }

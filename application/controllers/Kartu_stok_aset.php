@@ -25,6 +25,13 @@ class Kartu_stok_non_aset extends CI_Controller
         $this->form_validation->set_rules('lokasi', 'Lokasi', 'required|max_length[100]');
         $this->form_validation->set_rules('kondisi', 'Kondisi', 'required|max_length[100]');
         $this->form_validation->set_rules('isWaranty', 'Garansi', 'required|max_length[100]');
+        $this->form_validation->set_rules('isKendaraan', 'Kendaraan', 'required|max_length[100]');
+
+        if($this->input->post('isWaranty') == true){
+        $this->form_validation->set_rules('noKaratuGaransi', 'No kartu Garansi', 'required|max_length[100]');
+        $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
+        $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
+        }
 
         if ($this->form_validation->run()) {
             $params0 = array(

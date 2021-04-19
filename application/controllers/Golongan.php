@@ -59,7 +59,7 @@ class Golongan extends CI_Controller
                 $this->load->view('administrator/layouts/main', $data);
             }
         } else {
-            alert('error', 'Gagal...', 'Data yang ingin dihapus tidak ditemukan');
+            alert('error', 'Gagal...', 'Data yang ingin diubah tidak ditemukan');
             redirect('golongan/index');
             die;
         }

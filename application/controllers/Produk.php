@@ -76,7 +76,7 @@ class Produk extends CI_Controller
         if (isset($produk['id'])) {
             $cek = $this->Global_model->get_data('product_kendaraan', ['productId' => $id], false);
             if ($cek == null) {
-                $product_id = $this->Produk_model->delete_produk($id);;
+                $product_id = $this->Produk_model->delete_produk($id);
                 if ($product_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {
