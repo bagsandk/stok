@@ -74,11 +74,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'pgsql:host=localhost;port=5432;dbname=dds',
+	'dsn'	=> 'pgsql:host=localhost;port=5432;dbname=stok',
 	'hostname' => 'localhost',
 	'username' => 'postgres',
 	'password' => 'n21tgl1310',
-	'database' => 'dds',
+	'database' => '',
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
