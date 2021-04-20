@@ -89,6 +89,8 @@
                 <section class="section">
                     <?php if ($this->session->flashdata('message')) {
                         echo $this->session->flashdata('message');
+                        $this->session->unset_userdata('message');
+
                     } ?>
                     <?php
                     if (isset($_view) && $_view)
@@ -118,7 +120,6 @@
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
-
         $('#isWaranty').change(() => {
             let check = $('#isWaranty').is(':checked')
             if (check) {
@@ -135,16 +136,24 @@
                 $('#formKendaraan').attr('hidden', true)
             }
         })
+        $('#isNomor').change(() => {
+            let check = $('#isNomor').is(':checked')
+            if (check) {
+                $('#formInputNomor').attr('hidden', false)
+            } else {
+                $('#formInputNomor').attr('hidden', true)
+            }
+        })
         $('#tambahNomor').click(() => {
             let html = $('#formTambahanNomor').html()
-            let count = $('.formTambahNomor').length
             let ke = $('.formTambahNomor').last().attr('id').split('-')
-            let rowke = ke[1] 
-            $('#formTambahNomor-' + rowke).after('<div id="formTambahNomor-' + count + '" class="col-md-12 formTambahNomor"><div class="row"> <div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label> <div class="form-group"> <input type="text" name="nama[]" value="<?php echo $this->input->post('nama'); ?>" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div> </div> <div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label> <div class="form-group"> <input type="text" name="nomor[]" value="<?php echo $this->input->post('nomor'); ?>" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div> </div> <div class="col-md-2 d-flex align-items-center"> <button type="button"  onclick="hapusNomor(' + count + ')"  class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>')
+            let rowke = ke[1]
+            $('#formTambahNomor-' + rowke).after('<div id="formTambahNomor-' + (parseInt( rowke) + 1) + '" class="col-md-12 formTambahNomor"><div class="row"> <div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label> <div class="form-group"> <input type="text" name="nama[]" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div> </div> <div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label> <div class="form-group"> <input type="text" name="nomor[]" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div> </div> <div class="col-md-2 d-flex align-items-center"> <button type="button"  onclick="hapusNomor(' + (parseInt( rowke) + 1) + ')"  class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>')
         })
 
         function hapusNomor(id) {
             $("#formTambahNomor-" + id).remove();
+            let ka = ['l','']
         }
     </script>
     <!-- Template JS File -->

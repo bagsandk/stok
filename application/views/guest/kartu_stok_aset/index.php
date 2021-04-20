@@ -45,12 +45,33 @@
                                               <td><?= $t['statusPerolehan']; ?></td>
                                               <td><?= $t['lokasi']; ?></td>
                                               <td><?= $t['kondisi']; ?></td>
-                                              <td><?= $t['isWaranty']; ?></td>
-                                              <td><?= $t['isWaranty']; ?></td>
+                                              <td>
+                                                  <ul>
+                                                      <li>NO : 
+                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'noKartuGaransi'); ?>
+                                                      </li>
+                                                      <li>Masa : 
+                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'masaGaransi'); ?>
+                                                      </li>
+                                                      <li>Jenis : 
+                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'jenisGaransi'); ?>
+                                                      </li>
+                                                  </ul>
+                                              </td>
                                               <td><?= $t['isWaranty']; ?></td>
                                               <td>
-                                                  <a href="<?php echo base_url('kartu_stok_aset/edit/' . $t['id']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>
-                                                  <a href="<?php echo base_url('kartu_stok_aset/remove/' . $t['id']); ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><span class="fa fa-trash"></span></a>
+                                                  <ul>
+                                                      <li>Nama : 
+                                                          <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'namaStnk'); ?>
+                                                      </li>
+                                                      <li>Alamat : 
+                                                          <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'alamatStnk'); ?>
+                                                      </li>
+                                                  </ul>
+                                              </td>
+                                              <td>
+                                                  <a href="<?php echo base_url('kartu_stok_aset/edit/' . $t['noInventaris']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>
+                                                  <a href="<?php echo base_url('kartu_stok_aset/remove/' . $t['noInventaris']); ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><span class="fa fa-trash"></span></a>
                                               </td>
                                           </tr>
                                       <?php

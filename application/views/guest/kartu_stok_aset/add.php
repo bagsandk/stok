@@ -7,7 +7,7 @@
 			<div class="col-12 col-md-12 col-lg-12">
 				<div class="card">
 					<div class="card-body">
-						<?php echo form_open('kartu_stok_non_aset/add'); ?>
+						<?php echo form_open('kartu_stok_aset/add'); ?>
 						<div class="row">
 							<div class="col-md-12">
 								<label for="productId" class="control-label"><span class="text-danger">*</span>Produk</label>
@@ -21,6 +21,13 @@
 										?>
 									</select>
 									<span class="text-danger"><?php echo form_error('productId'); ?></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label for="noInventaris" class="control-label"><span class="text-danger">*</span>No Inventaris</label>
+								<div class="form-group">
+									<input type="text" name="noInventaris" value="<?php echo $this->input->post('noInventaris'); ?>" class="form-control" id="noInventaris" />
+									<span class="text-danger"><?php echo form_error('noInventaris'); ?></span>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -60,6 +67,13 @@
 								</div>
 							</div>
 							<div class="col-md-6">
+								<label for="hargaPerolehan" class="control-label"><span class="text-danger">*</span>Harga Perolehan</label>
+								<div class="form-group">
+									<input type="text" name="hargaPerolehan" value="<?php echo $this->input->post('hargaPerolehan'); ?>" class="form-control" id="hargaPerolehan" />
+									<span class="text-danger"><?php echo form_error('hargaPerolehan'); ?></span>
+								</div>
+							</div>
+							<div class="col-md-6">
 								<label for="statusPerolehan" class="control-label"><span class="text-danger">*</span>Status Perolehan</label>
 								<div class="form-group">
 									<input type="text" name="statusPerolehan" value="<?php echo $this->input->post('statusPerolehan'); ?>" class="form-control" id="statusPerolehan" />
@@ -83,13 +97,13 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<label class="custom-switch mt-2">
-										<input type="checkbox" name="isWaranty" id="isWaranty" class="custom-switch-input">
+										<input type="checkbox" <?= $this->input->post('isWaranty') ? 'checked="true"' : '' ?> value="true" name="isWaranty" id="isWaranty" class="custom-switch-input">
 										<span class="custom-switch-indicator"></span>
 										<span class="custom-switch-description">Garansi</span>
 									</label>
 								</div>
 							</div>
-							<div id="formWaranty" class="col-md-12" hidden>
+							<div id="formWaranty" class="col-md-12" <?= $this->input->post('isWaranty') ? '' : 'hidden' ?>>
 								<div class="row">
 									<div class="col-md-4">
 										<label for="noKartuGaransi" class="control-label"><span class="text-danger">*</span>No Kartu Garansi</label>
@@ -117,18 +131,18 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<label class="custom-switch mt-2">
-										<input type="checkbox" name="kendaraan" id="kendaraan" class="custom-switch-input">
+										<input type="checkbox" value="true" name="isKendaraan" id="kendaraan" class="custom-switch-input" <?= $this->input->post('isKendaraan') ? 'checked="true"' : '' ?>>
 										<span class="custom-switch-indicator"></span>
 										<span class="custom-switch-description">Kendaraan</span>
 									</label>
 								</div>
 							</div>
-							<div id="formKendaraan" class="col-md-12" hidden>
+							<div id="formKendaraan" class="col-md-12" <?= $this->input->post('isKendaraan') ? '' : 'hidden' ?>>
 								<div class="row">
 									<div class="col-md-4">
-										<label for="namaaStnk" class="control-label"><span class="text-danger">*</span>Nama STNK</label>
+										<label for="namaStnk" class="control-label"><span class="text-danger">*</span>Nama STNK</label>
 										<div class="form-group">
-											<input type="text" name="namaaStnk" value="<?php echo $this->input->post('namaaStnk'); ?>" class="form-control" id="namaaStnk" />
+											<input type="text" name="namaStnk" value="<?php echo $this->input->post('namaStnk'); ?>" class="form-control" id="namaStnk" />
 											<span class="text-danger"><?php echo form_error('namaStnk'); ?></span>
 										</div>
 									</div>
@@ -148,38 +162,66 @@
 									</div>
 								</div>
 							</div>
-							<div id="formTambahNomor-0" class="col-md-12 formTambahNomor">
-								<div class="row">
-									<div class="col-md-5">
-										<label for="nama" class="control-label">Nama Nomor</label>
-										<div class="form-group">
-											<input type="text" name="nama[]" value="<?php echo $this->input->post('nama'); ?>" class="form-control" id="nama" />
-											<span class="text-danger"><?php echo form_error('nama'); ?></span>
-										</div>
-									</div>
-									<div class="col-md-5">
-										<label for="nomor" class="control-label">Nomor</label>
-										<div class="form-group">
-											<input type="text" name="nomor[]" value="<?php echo $this->input->post('nomor'); ?>" class="form-control" id="nomor" />
-											<span class="text-danger"><?php echo form_error('nomor'); ?></span>
-										</div>
-									</div>
-									<div class="col-md-2 d-flex align-items-center">
-										<button type="button" class=" btn btn-sm btn-rounded btn-success" id="tambahNomor">Tambah Nomor</button>
-									</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="custom-switch mt-2">
+										<input type="checkbox" value="true" name="isNomor" id="isNomor" class="custom-switch-input" <?= $this->input->post('isNomor') ? 'checked="true"' : '' ?>>
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Penomoran</span>
+									</label>
 								</div>
 							</div>
+							<div class="col-md-12" <?= $this->input->post('isNomor') ? '' : 'hidden' ?> id="formInputNomor">
+								<div id="formTambahNomor-0" class="col-md-12 formTambahNomor">
+									<div class="row">
+										<div class="col-md-5">
+											<label for="nama" class="control-label">Nama Nomor</label>
+											<div class="form-group">
+												<input type="text" name="nama[]" value="<?php echo $this->input->post('nama[0]'); ?>" class="form-control" id="nama" />
+												<span class="text-danger"><?php echo form_error('nama'); ?></span>
+											</div>
+										</div>
+										<div class="col-md-5">
+											<label for="nomor" class="control-label">Nomor</label>
+											<div class="form-group">
+												<input type="text" name="nomor[]" value="<?php echo $this->input->post('nomor[0]'); ?>" class="form-control" id="nomor" />
+												<span class="text-danger"><?php echo form_error('nomor'); ?></span>
+											</div>
+										</div>
+										<div class="col-md-2 d-flex align-items-center">
+											<button type="button" class=" btn btn-sm btn-rounded btn-success" id="tambahNomor">Tambah Nomor</button>
+										</div>
+									</div>
+								</div>
+								<?php ?> 
+								<?php if (!empty($this->input->post('nama')) && count($this->input->post('nama')) > 1) {
+									foreach ($this->input->post('nama') as $i => $nom) { ?>
+										<?php if ($i == 0) {
+											continue;
+										} ?>
+										<div id="formTambahNomor-<?= $i ?>" class="col-md-12 formTambahNomor">
+											<div class="row">
+												<div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label>
+													<div class="form-group"> <input type="text" name="nama[]" value="<?php echo $this->input->post('nama[' . $i . ']'); ?>" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div>
+												</div>
+												<div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label>
+													<div class="form-group"> <input type="text" name="nomor[]" value="<?php echo $this->input->post('nomor[' . $i . ']'); ?>" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div>
+												</div>
+												<div class="col-md-2 d-flex align-items-center"> <button type="button" onclick="hapusNomor(<?= $i ?>)" class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>
+								<?php }
+								} ?>
+							</div>
 						</div>
-						<button type="button" onclick="goBack()" class="btn btn-danger btn-sm">
-							<i class="fas fa-arrow-left"></i> Kembali
-						</button>
-						<button type="submit" class="btn btn-success btn-sm">
-							<i class="fa fa-check"></i> Simpan
-						</button>
-						<?php echo form_close(); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+						<button type=" button" onclick="goBack()" class="btn btn-danger btn-sm">
+														<i class="fas fa-arrow-left"></i> Kembali
+													</button>
+													<button type="submit" class="btn btn-success btn-sm">
+														<i class="fa fa-check"></i> Simpan
+													</button>
+													<?php echo form_close(); ?>
+												</div>
+											</div>
+										</div>
+							</div>
+						</div>
 </section>

@@ -20,10 +20,49 @@ class Kartu_stok_aset_model extends CI_Model
         history('Insert', $this->db->last_query());
         return $r;
     }
+    function add_kartu_garansi($params)
+    {
+        $r = $this->db->insert('kartu_garansi', $params);
+        history('Insert', $this->db->last_query());
+        return $r;
+    }
+    function add_ksa_nomor($params)
+    {
+        $r = $this->db->insert('ksa_nomor', $params);
+        history('Insert', $this->db->last_query());
+        return $r;
+    }
+    function add_ksa_kendaraan($params)
+    {
+        $r = $this->db->insert('ksa_kendaraan', $params);
+        history('Insert', $this->db->last_query());
+        return $r;
+    }
     function update_kartu_stok_aset($id, $params)
     {
         $this->db->where('noInventaris', $id);
         $r =  $this->db->update('kartu_stok_aset', $params);
+        history('Update', $this->db->last_query());
+        return $r;
+    }
+    function update_kartu_garansi($id, $params)
+    {
+        $this->db->where('noInventaris', $id);
+        $r =  $this->db->update('kartu_garansi', $params);
+        history('Update', $this->db->last_query());
+        return $r;
+    }
+    function update_ksa_kendaraan($id, $params)
+    {
+        $this->db->where('noInventaris', $id);
+        $r =  $this->db->update('ksa_kendaraan', $params);
+        history('Update', $this->db->last_query());
+        return $r;
+    }
+    function update_ksa_nomor($id, $params)
+    {
+        $this->db->where('noInventaris', $id);
+        $r =  $this->db->update('ksa_nomor', $params);
         history('Update', $this->db->last_query());
         return $r;
     }

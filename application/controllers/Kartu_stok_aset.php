@@ -16,6 +16,8 @@ class Kartu_stok_aset extends CI_Controller
     function add()
     {
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
+        $this->form_validation->set_rules('noInventaris', 'No Inventaris', 'required|max_length[100]');
         $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
         $this->form_validation->set_rules('hargaPerolehan', 'Harga perlolehan', 'required|max_length[100]');
         $this->form_validation->set_rules('masaManfaat', 'Masa manfaat', 'required|max_length[100]');
@@ -25,22 +27,24 @@ class Kartu_stok_aset extends CI_Controller
         $this->form_validation->set_rules('statusPerolehan', 'Status perolehan', 'required|max_length[100]');
         $this->form_validation->set_rules('lokasi', 'Lokasi', 'required|max_length[100]');
         $this->form_validation->set_rules('kondisi', 'Kondisi', 'required|max_length[100]');
-        $this->form_validation->set_rules('isWaranty', 'Garansi', 'required|max_length[100]');
-        $this->form_validation->set_rules('isKendaraan', 'Kendaraan', 'required|max_length[100]');
 
-        if ($this->input->post('isWaranty') == true) {
-            $this->form_validation->set_rules('noKaratuGaransi', 'No kartu Garansi', 'required|max_length[100]');
+        if ($this->input->post('isWaranty') == "true") {
+            $this->form_validation->set_rules('noKartuGaransi', 'No kartu Garansi', 'required|max_length[100]');
             $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
             $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
         }
-        if ($this->input->post('isKendaraan') == true) {
+        if ($this->input->post('isKendaraan') == "true") {
             $this->form_validation->set_rules('namaStnk', 'Nama Stnk', 'required|max_length[100]');
             $this->form_validation->set_rules('alamatStnk', 'Alamat Stnk', 'required|max_length[100]');
             $this->form_validation->set_rules('peruntukan', 'Peruntukan', 'required|max_length[100]');
         }
 
         if ($this->form_validation->run()) {
-            $params0 = array(
+            // var_dump($_POST);
+            // die;
+            $asset = array(
+                'productId' => $this->input->post('productId'),
+                'noInventaris' => $this->input->post('noInventaris'),
                 'ruang' => $this->input->post('ruang'),
                 'hargaPerolehan' => $this->input->post('hargaPerolehan'),
                 'masaManfaat' => $this->input->post('masaManfaat'),
@@ -52,20 +56,41 @@ class Kartu_stok_aset extends CI_Controller
                 'kondisi' => $this->input->post('kondisi'),
                 'isWaranty' => $this->input->post('isWaranty'),
                 'createdAt' => date('Y-m-d H:i:s'),
-                'kodeBarang' => $this->input->post('kodeBarang'),
             );
-            $produk_id = $this->Produk_model->add_produk($params0);
-            $params = array(
-                'tipe' => $this->input->post('tipe'),
-                'bahanBakar' => $this->input->post('bahanBakar'),
-                'thPembuatan' => $this->input->post('thPembuatan'),
-                'warna' => $this->input->post('warna'),
-                'hp' => $this->input->post('hp'),
-                'createdAt' => date('Y-m-d H:i:s'),
-                'productId' => $produk_id,
-            );
-            $in = $this->Kartu_stok_aset_model->add_kartu_stok_aset($params);
-            if ($in) {
+            $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset);
+            if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
+                $garansi = [
+                    'noInventaris' => $this->input->post('noInventaris'),
+                    'noKartuGaransi' => $this->input->post('noKartuGaransi'),
+                    'jenisGaransi' => $this->input->post('jenisGaransi'),
+                    'masaGaransi' => $this->input->post('masaGaransi'),
+                    'createdAt' => date('Y-m-d H:i:s'),
+                    'noInventaris' => $this->input->post('noInventaris'),
+                ];
+                $this->Kartu_stok_aset_model->add_kartu_garansi($garansi);
+            }
+            if ($this->input->post('isKendaraan') == "true" && $this->input->post('namaStnk') != '') {
+                $kendaraan = [
+                    'namaStnk' => $this->input->post('namaStnk'),
+                    'alamatStnk' => $this->input->post('alamatStnk'),
+                    'peruntukan' => $this->input->post('peruntukan'),
+                    'createdAt' => date('Y-m-d H:i:s'),
+                    'ksa' => $this->input->post('noInventaris'),
+                ];
+                $this->Kartu_stok_aset_model->add_ksa_kendaraan($kendaraan);
+            }
+            if ($this->input->post('isNomor') == "true" && $this->input->post('nama') != '') {
+                foreach ($this->input->post('nama') as $i => $n) {
+                    $nomor = [
+                        'nama' => $this->input->post('nama[' . $i . ']'),
+                        'nomor' => $this->input->post('nomor[' . $i . ']'),
+                        'createdAt' => date('Y-m-d H:i:s'),
+                        'ksa' => $this->input->post('noInventaris'),
+                    ];
+                    $this->Kartu_stok_aset_model->add_ksa_kendaraan($nomor);
+                }
+            }
+            if ($noInventaris) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
                 alert('error', 'Gagal...', 'Gagal menambahkan data');
@@ -82,41 +107,90 @@ class Kartu_stok_aset extends CI_Controller
         $data['produk_kendaraan'] = $this->Produk_kendaraan_model->get_produk_kendaraan($id);
         if (isset($data['produk_kendaraan']['id'])) {
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
-            $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');
-            $this->form_validation->set_rules('satuan', 'Satuan', 'required|max_length[100]');
-            $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|max_length[100]');
-            $this->form_validation->set_rules('kodeBarang', 'Kode Barang', 'required|max_length[100]');
-            $this->form_validation->set_rules('tipe', 'Tipe kendaraan', 'required|max_length[100]');
-            $this->form_validation->set_rules('bahanBakar', 'Bahan bakar', 'required|max_length[100]');
-            $this->form_validation->set_rules('thPembuatan', 'Tahun Pembuatan', 'required|max_length[100]');
-            $this->form_validation->set_rules('warna', 'Warna', 'required|max_length[100]');
-            $this->form_validation->set_rules('hp', 'HP', 'required|max_length[100]');
+            $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
+            $this->form_validation->set_rules('noInventaris', 'No Inventaris', 'required|max_length[100]');
+            $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
+            $this->form_validation->set_rules('hargaPerolehan', 'Harga perlolehan', 'required|max_length[100]');
+            $this->form_validation->set_rules('masaManfaat', 'Masa manfaat', 'required|max_length[100]');
+            $this->form_validation->set_rules('supplier', 'Supplier', 'required|max_length[100]');
+            $this->form_validation->set_rules('pengguna', 'Pengunaa', 'required|max_length[100]');
+            $this->form_validation->set_rules('noPo', 'No PO', 'required|max_length[100]');
+            $this->form_validation->set_rules('statusPerolehan', 'Status perolehan', 'required|max_length[100]');
+            $this->form_validation->set_rules('lokasi', 'Lokasi', 'required|max_length[100]');
+            $this->form_validation->set_rules('kondisi', 'Kondisi', 'required|max_length[100]');
+
+            if ($this->input->post('isWaranty') == "true") {
+                $this->form_validation->set_rules('noKartuGaransi', 'No kartu Garansi', 'required|max_length[100]');
+                $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
+                $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
+            }
+            if ($this->input->post('isKendaraan') == "true") {
+                $this->form_validation->set_rules('namaStnk', 'Nama Stnk', 'required|max_length[100]');
+                $this->form_validation->set_rules('alamatStnk', 'Alamat Stnk', 'required|max_length[100]');
+                $this->form_validation->set_rules('peruntukan', 'Peruntukan', 'required|max_length[100]');
+            }
+
             if ($this->form_validation->run()) {
-                $params0 = array(
-                    'nama' => $this->input->post('nama'),
-                    'merek' => $this->input->post('merek'),
-                    'satuan' => $this->input->post('satuan'),
-                    'deskripsi' => $this->input->post('deskripsi'),
-                    'gambar' => '-',
+                // var_dump($_POST);
+                // die;
+                $asset = array(
+                    'productId' => $this->input->post('productId'),
+                    'noInventaris' => $this->input->post('noInventaris'),
+                    'ruang' => $this->input->post('ruang'),
+                    'hargaPerolehan' => $this->input->post('hargaPerolehan'),
+                    'masaManfaat' => $this->input->post('masaManfaat'),
+                    'supplier' => $this->input->post('supplier'),
+                    'pengguna' => $this->input->post('pengguna'),
+                    'noPo' => $this->input->post('noPo'),
+                    'statusPerolehan' => $this->input->post('statusPerolehan'),
+                    'lokasi' => $this->input->post('lokasi'),
+                    'kondisi' => $this->input->post('kondisi'),
+                    'isWaranty' => $this->input->post('isWaranty'),
                     'updatedAt' => date('Y-m-d H:i:s'),
-                    'kodeBarang' => $this->input->post('kodeBarang'),
                 );
-                $this->Produk_model->update_produk($data['produk_kendaraan']['productId'], $params0);
-                $params = array(
-                    'tipe' => $this->input->post('tipe'),
-                    'bahanBakar' => $this->input->post('bahanBakar'),
-                    'thPembuatan' => $this->input->post('thPembuatan'),
-                    'warna' => $this->input->post('warna'),
-                    'hp' => $this->input->post('hp'),
-                    'updatedAt' => date('Y-m-d H:i:s'),
-                );
-                $this->Produk_kendaraan_model->update_produk_kendaraan($id, $params);
-                redirect('produk_kendaraan/index');
+                $noInventaris = $this->Kartu_stok_aset_model->update_kartu_stok_non_aset($asset);
+                if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
+                    $garansi = [
+                        'noInventaris' => $this->input->post('noInventaris'),
+                        'noKartuGaransi' => $this->input->post('noKartuGaransi'),
+                        'jenisGaransi' => $this->input->post('jenisGaransi'),
+                        'masaGaransi' => $this->input->post('masaGaransi'),
+                        'updatedAt' => date('Y-m-d H:i:s'),
+                        'noInventaris' => $this->input->post('noInventaris'),
+                    ];
+                    $this->Kartu_stok_aset_model->update_kartu_garansi($garansi);
+                }
+                if ($this->input->post('isKendaraan') == "true" && $this->input->post('namaStnk') != '') {
+                    $kendaraan = [
+                        'namaStnk' => $this->input->post('namaStnk'),
+                        'alamatStnk' => $this->input->post('alamatStnk'),
+                        'peruntukan' => $this->input->post('peruntukan'),
+                        'updatedAt' => date('Y-m-d H:i:s'),
+                        'ksa' => $this->input->post('noInventaris'),
+                    ];
+                    $this->Kartu_stok_aset_model->update_ksa_kendaraan($kendaraan);
+                }
+                if ($this->input->post('isNomor') == "true" && $this->input->post('nama') != '') {
+                    foreach ($this->input->post('nama') as $i => $n) {
+                        $nomor = [
+                            'nama' => $this->input->post('nama[' . $i . ']'),
+                            'nomor' => $this->input->post('nomor[' . $i . ']'),
+                            'updatedAt' => date('Y-m-d H:i:s'),
+                            'ksa' => $this->input->post('noInventaris'),
+                        ];
+                        $this->Kartu_stok_aset_model->update_ksa_kendaraan($nomor);
+                    }
+                }
+                if ($noInventaris) {
+                    alert('success', 'Berhasil...', 'Berhasil merubah data');
+                } else {
+                    alert('error', 'Gagal...', 'Gagal merubah data');
+                }
+                redirect('kartu_stok_aset/index');
             } else {
-                $data['barang'] = $this->Barang_model->get_all_barang_();
-                $data['_view'] = 'administrator/produk_kendaraan/edit';
-                $this->load->view('administrator/layouts/main', $data);
+                $data['produk'] = $this->Produk_model->get_all_produk_();
+                $data['_view'] = 'guest/kartu_stok_aset/edit';
+                $this->load->view('guest/layouts/main', $data);
             }
         } else
             show_error('The produk_kendaraan you are trying to edit does not exist.');

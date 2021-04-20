@@ -71,7 +71,7 @@
                             </a>
                         </li>
                         <li class="menu-header">Master</li>
-                        <li class="dropdown <?= ($this->uri->segment(1) == 'golongan' || $this->uri->segment(1) == 'kelompok' || $this->uri->segment(1) == 'subkelompok' || $this->uri->segment(1) == 'barang' || $this->uri->segment(1) == 'produk' || $this->uri->segment(1) == 'produk_kendaraan' )  ? 'active' : '' ?>">
+                        <li class="dropdown <?= ($this->uri->segment(1) == 'golongan' || $this->uri->segment(1) == 'kelompok' || $this->uri->segment(1) == 'subkelompok' || $this->uri->segment(1) == 'barang' || $this->uri->segment(1) == 'produk' || $this->uri->segment(1) == 'produk_kendaraan')  ? 'active' : '' ?>">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-database"></i><span>Data Master</span></a>
                             <ul class="dropdown-menu">
                                 <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'golongan') ? 'active' : ''; ?>">
@@ -116,6 +116,7 @@
                 <section class="section">
                     <?php if ($this->session->flashdata('message')) {
                         echo $this->session->flashdata('message');
+                        $this->session->unset_userdata('message');
                     } ?>
                     <?php
                     if (isset($_view) && $_view)
