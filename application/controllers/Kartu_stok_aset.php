@@ -1,15 +1,16 @@
 <?php
-class Kartu_stok_non_aset extends CI_Controller
+class Kartu_stok_aset extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
-        $this->load->model('Kartu_stok_non_aset_model');
+        $this->load->model('Kartu_stok_aset_model');
+        $this->load->model('Produk_model');
     }
     function index()
     {
-        $data['kartu_stok_non_aset_'] = $this->Kartu_stok_non_aset_model->get_all_kartu_stok_non_aset_();
-        $data['_view'] = 'guest/kartu_stok_non_aset/index';
+        $data['kartu_stok_aset_'] = $this->Kartu_stok_aset_model->get_all_kartu_stok_aset_();
+        $data['_view'] = 'guest/kartu_stok_aset/index';
         $this->load->view('guest/layouts/main', $data);
     }
     function add()
@@ -27,15 +28,15 @@ class Kartu_stok_non_aset extends CI_Controller
         $this->form_validation->set_rules('isWaranty', 'Garansi', 'required|max_length[100]');
         $this->form_validation->set_rules('isKendaraan', 'Kendaraan', 'required|max_length[100]');
 
-        if($this->input->post('isWaranty') == true){
-        $this->form_validation->set_rules('noKaratuGaransi', 'No kartu Garansi', 'required|max_length[100]');
-        $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
-        $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
+        if ($this->input->post('isWaranty') == true) {
+            $this->form_validation->set_rules('noKaratuGaransi', 'No kartu Garansi', 'required|max_length[100]');
+            $this->form_validation->set_rules('jenisGaransi', 'Jenis Garansi', 'required|max_length[100]');
+            $this->form_validation->set_rules('masaGaransi', 'Masa Garansi', 'required|max_length[100]');
         }
-        if($this->input->post('isKendaraan') == true){
-        $this->form_validation->set_rules('namaStnk', 'Nama Stnk', 'required|max_length[100]');
-        $this->form_validation->set_rules('alamatStnk', 'Alamat Stnk', 'required|max_length[100]');
-        $this->form_validation->set_rules('peruntukan', 'Peruntukan', 'required|max_length[100]');
+        if ($this->input->post('isKendaraan') == true) {
+            $this->form_validation->set_rules('namaStnk', 'Nama Stnk', 'required|max_length[100]');
+            $this->form_validation->set_rules('alamatStnk', 'Alamat Stnk', 'required|max_length[100]');
+            $this->form_validation->set_rules('peruntukan', 'Peruntukan', 'required|max_length[100]');
         }
 
         if ($this->form_validation->run()) {
@@ -63,11 +64,17 @@ class Kartu_stok_non_aset extends CI_Controller
                 'createdAt' => date('Y-m-d H:i:s'),
                 'productId' => $produk_id,
             );
-            $produk_kendaraan_id = $this->Produk_kendaraan_model->add_produk_kendaraan($params);
-            redirect('produk_kendaraan/index');
+            $in = $this->Kartu_stok_aset_model->add_kartu_stok_aset($params);
+            if ($in) {
+                alert('success', 'Berhasil...', 'Berhasil menambahkan data');
+            } else {
+                alert('error', 'Gagal...', 'Gagal menambahkan data');
+            }
+            redirect('kartu_stok_aset/index');
         } else {
-            $data['_view'] = 'administrator/produk_kendaraan/add';
-            $this->load->view('administrator/layouts/main', $data);
+            $data['produk'] = $this->Produk_model->get_all_produk_();
+            $data['_view'] = 'guest/kartu_stok_aset/add';
+            $this->load->view('guest/layouts/main', $data);
         }
     }
     function edit($id)

@@ -72,7 +72,12 @@
                         </li>
                         <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'kartu_stok_non_aset') ? 'active' : ''; ?>">
                             <a class="nav-link" href="<?php echo base_url('kartu_stok_non_aset/index'); ?>">
-                            <i class="fas fa-box-open"></i> <span>Kartu Stok Non Asset</span>
+                                <i class="fas fa-box-open"></i> <span>Kartu Stok Non Asset</span>
+                            </a>
+                        </li>
+                        <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'kartu_stok_aset') ? 'active' : ''; ?>">
+                            <a class="nav-link" href="<?php echo base_url('kartu_stok_aset/index'); ?>">
+                                <i class="fas fa-box-open"></i> <span>Kartu Stok Asset</span>
                             </a>
                         </li>
                     </ul>
@@ -113,6 +118,34 @@
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
+
+        $('#isWaranty').change(() => {
+            let check = $('#isWaranty').is(':checked')
+            if (check) {
+                $('#formWaranty').attr('hidden', false)
+            } else {
+                $('#formWaranty').attr('hidden', true)
+            }
+        })
+        $('#kendaraan').change(() => {
+            let check = $('#kendaraan').is(':checked')
+            if (check) {
+                $('#formKendaraan').attr('hidden', false)
+            } else {
+                $('#formKendaraan').attr('hidden', true)
+            }
+        })
+        $('#tambahNomor').click(() => {
+            let html = $('#formTambahanNomor').html()
+            let count = $('.formTambahNomor').length
+            let ke = $('.formTambahNomor').last().attr('id').split('-')
+            let rowke = ke[1] 
+            $('#formTambahNomor-' + rowke).after('<div id="formTambahNomor-' + count + '" class="col-md-12 formTambahNomor"><div class="row"> <div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label> <div class="form-group"> <input type="text" name="nama[]" value="<?php echo $this->input->post('nama'); ?>" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div> </div> <div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label> <div class="form-group"> <input type="text" name="nomor[]" value="<?php echo $this->input->post('nomor'); ?>" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div> </div> <div class="col-md-2 d-flex align-items-center"> <button type="button"  onclick="hapusNomor(' + count + ')"  class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>')
+        })
+
+        function hapusNomor(id) {
+            $("#formTambahNomor-" + id).remove();
+        }
     </script>
     <!-- Template JS File -->
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
