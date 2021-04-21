@@ -7,7 +7,7 @@
               <div class="col-12 col-md-12 col-lg-12">
                   <div class="card">
                       <div class="card-header">
-                          <a href="<?= base_url('kartu_stok_aset/add') ?>" class="badge badge-success">Tambah Produk</a>
+                          <a href="<?= base_url('kartu_stok_aset/add') ?>" class="badge badge-success">Tambah</a>
                       </div>
                       <div class="card-body">
                           <div class="table-responsive">
@@ -46,28 +46,41 @@
                                               <td><?= $t['lokasi']; ?></td>
                                               <td><?= $t['kondisi']; ?></td>
                                               <td>
-                                                  <ul>
-                                                      <li>NO : 
-                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'noKartuGaransi'); ?>
-                                                      </li>
-                                                      <li>Masa : 
-                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'masaGaransi'); ?>
-                                                      </li>
-                                                      <li>Jenis : 
-                                                          <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'jenisGaransi'); ?>
-                                                      </li>
-                                                  </ul>
-                                              </td>
-                                              <td><?= $t['isWaranty']; ?></td>
+                                                  <?php if ($t['isWaranty']) { ?>
+                                                      <ul>
+                                                          <li>NO :
+                                                              <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'noKartuGaransi'); ?>
+                                                          </li>
+                                                          <li>Masa :
+                                                              <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'masaGaransi'); ?>
+                                                          </li>
+                                                          <li>Jenis :
+                                                              <?= view('kartu_garansi', ['noInventaris' => $t['noInventaris']], 'jenisGaransi'); ?>
+                                                          </li>
+                                                      </ul>
+                                                  <?php } else { ?>
+                                                      Tidak Bergaransi
+                                                  <?php } ?>
                                               <td>
                                                   <ul>
-                                                      <li>Nama : 
-                                                          <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'namaStnk'); ?>
-                                                      </li>
-                                                      <li>Alamat : 
-                                                          <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'alamatStnk'); ?>
-                                                      </li>
+                                                      <?php
+                                                        $nomor = $this->db->get_where('ksa_nomor', ['ksa' => $t['noInventaris']])->result_array();
+                                                        foreach ($nomor as $n) {
+                                                        ?>
+                                                          <li><?= $n['nama'] . ' : ' . $n['nomor'] ?></li>
+                                                      <?php } ?>
                                                   </ul>
+                                              </td>
+                                              <td><?php if (view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'namaStnk') != '') { ?>
+                                                      <ul>
+                                                          <li>Nama :
+                                                              <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'namaStnk'); ?>
+                                                          </li>
+                                                          <li>Alamat :
+                                                              <?= view('ksa_kendaraan', ['ksa' => $t['noInventaris']], 'alamatStnk'); ?>
+                                                          </li>
+                                                      </ul>
+                                                  <?php } ?>
                                               </td>
                                               <td>
                                                   <a href="<?php echo base_url('kartu_stok_aset/edit/' . $t['noInventaris']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>

@@ -1,6 +1,6 @@
 <section class="section">
 	<div class="section-header">
-		<h1>TAMBAH DATA KARTU STOK NON ASET</h1>
+		<h1>TAMBAH DATA KARTU STOK ASET</h1>
 	</div>
 	<div class="section-body">
 		<div class="row">

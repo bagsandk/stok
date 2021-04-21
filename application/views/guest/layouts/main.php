@@ -34,8 +34,12 @@
         <div class="main-wrapper">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <ul class="navbar-nav navbar-left mr-auto">
-                </ul>
+                <form class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+                        <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+                    </ul>
+                </form>
                 <ul class="navbar-nav navbar-right">
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/<?= $this->session->userdata('profile'); ?>" class="rounded-circle mr-1">
@@ -90,7 +94,6 @@
                     <?php if ($this->session->flashdata('message')) {
                         echo $this->session->flashdata('message');
                         $this->session->unset_userdata('message');
-
                     } ?>
                     <?php
                     if (isset($_view) && $_view)
@@ -148,12 +151,22 @@
             let html = $('#formTambahanNomor').html()
             let ke = $('.formTambahNomor').last().attr('id').split('-')
             let rowke = ke[1]
-            $('#formTambahNomor-' + rowke).after('<div id="formTambahNomor-' + (parseInt( rowke) + 1) + '" class="col-md-12 formTambahNomor"><div class="row"> <div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label> <div class="form-group"> <input type="text" name="nama[]" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div> </div> <div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label> <div class="form-group"> <input type="text" name="nomor[]" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div> </div> <div class="col-md-2 d-flex align-items-center"> <button type="button"  onclick="hapusNomor(' + (parseInt( rowke) + 1) + ')"  class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>')
+            $('#formTambahNomor-' + rowke).after('<div id="formTambahNomor-' + (parseInt(rowke) + 1) + '" class="col-md-12 formTambahNomor"><div class="row"> <div class="col-md-5"> <label for="nama" class="control-label">Nama Nomor</label> <div class="form-group"> <input type="text" name="nama[]" class="form-control" id="nama" /> <span class="text-danger"><?php echo form_error('nama'); ?></span> </div> </div> <div class="col-md-5"> <label for="nomor" class="control-label">Nomor</label> <div class="form-group"> <input type="text" name="nomor[]" class="form-control" id="nomor" /> <span class="text-danger"><?php echo form_error('nomor'); ?></span> </div> </div> <div class="col-md-2 d-flex align-items-center"> <button type="button"  onclick="hapusNomor(' + (parseInt(rowke) + 1) + ')"  class=" btn btn-sm btn-rounded btn-danger hapus-nomor" ">Hapus Nomor</button> </div> </div></div>')
         })
 
         function hapusNomor(id) {
             $("#formTambahNomor-" + id).remove();
-            let ka = ['l','']
+            let ka = ['l', '']
+        }
+
+        function confirmDeleteNomor(id) {
+            var x = confirm("Are you sure you want to delete?");
+            if (x) {
+                hapusNomor(id)
+                return true;
+            } else {
+                return false;
+            }
         }
     </script>
     <!-- Template JS File -->

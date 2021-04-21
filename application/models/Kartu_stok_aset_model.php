@@ -9,6 +9,18 @@ class Kartu_stok_aset_model extends CI_Model
     {
         return $this->db->get_where('kartu_stok_aset', array('noInventaris' => $id))->row_array();
     }
+    function get_kartu_garansi($id)
+    {
+        return $this->db->get_where('kartu_garansi', array('noInventaris' => $id))->row_array();
+    }
+    function get_ksa_nomor($id)
+    {
+        return $this->db->get_where('ksa_nomor', array('ksa' => $id))->result_array();
+    }
+    function get_ksa_kendaraan($id)
+    {
+        return $this->db->get_where('ksa_kendaraan', array('ksa' => $id))->row_array();
+    }
     function get_all_kartu_stok_aset_()
     {
         $this->db->order_by('noInventaris', 'desc');
@@ -54,14 +66,14 @@ class Kartu_stok_aset_model extends CI_Model
     }
     function update_ksa_kendaraan($id, $params)
     {
-        $this->db->where('noInventaris', $id);
+        $this->db->where('ksa', $id);
         $r =  $this->db->update('ksa_kendaraan', $params);
         history('Update', $this->db->last_query());
         return $r;
     }
     function update_ksa_nomor($id, $params)
     {
-        $this->db->where('noInventaris', $id);
+        $this->db->where('kode', $id);
         $r =  $this->db->update('ksa_nomor', $params);
         history('Update', $this->db->last_query());
         return $r;

@@ -23,7 +23,8 @@ class Golongan extends CI_Controller
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s')
             );
-            $golongan_id = $this->Golongan_model->add_golongan($params);
+            $text = "Menambahkan data golongan dengan nama golongan = '" . $this->input->post('golongan') . "'";
+            $golongan_id = $this->Golongan_model->add_golongan($params, $text);
             if ($golongan_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
@@ -46,7 +47,8 @@ class Golongan extends CI_Controller
                     'namaGolongan' => $this->input->post('golongan'),
                     'updatedAt' => date('Y-m-d H:i:s')
                 );
-                $golongan_id = $this->Golongan_model->update_golongan($id, $params);
+                $text = "Mengubah nama golongan dari = '".$data['namaGolongan']."' Ke '" . $this->input->post('golongan') . "'";
+                $golongan_id = $this->Golongan_model->update_golongan($id, $params, $text);
                 if ($golongan_id) {
                     alert('success', 'Berhasil...', 'Berhasil mengubah data');
                 } else {
