@@ -47,12 +47,16 @@ class Golongan extends CI_Controller
                     'namaGolongan' => $this->input->post('golongan'),
                     'updatedAt' => date('Y-m-d H:i:s')
                 );
-                $text = "Mengubah nama golongan dari = '".$data['namaGolongan']."' Ke '" . $this->input->post('golongan') . "'";
-                $golongan_id = $this->Golongan_model->update_golongan($id, $params, $text);
-                if ($golongan_id) {
-                    alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                if ($this->input->post('golongan') != $data['golongan']['namaGolongan']) {
+                    $text = "Mengubah nama golongan dari = '" . $data['golongan']['namaGolongan'] . "' Ke '" . $this->input->post('golongan') . "'";
+                    $golongan_id = $this->Golongan_model->update_golongan($id, $params, $text);
+                    if ($golongan_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
                 } else {
-                    alert('error', 'Gagal...', 'Gagal mengubah data');
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
                 }
                 redirect('golongan/index');
                 die;
@@ -72,7 +76,8 @@ class Golongan extends CI_Controller
         if (isset($golongan['id'])) {
             $cek = $this->Global_model->get_data('kelompok', ['kodeGol' => $id], false);
             if ($cek == null) {
-                $golongan_id = $this->Golongan_model->delete_golongan($id);
+                $text = "Menghapus data golongan dengan nama golongan = '" . $golongan['namaGolongan'] . "'";
+                $golongan_id = $this->Golongan_model->delete_golongan($id, $text);
                 if ($golongan_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {

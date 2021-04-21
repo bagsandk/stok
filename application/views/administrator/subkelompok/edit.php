@@ -19,7 +19,7 @@
 							<div class="col-md-6">
 								<label for="kodeKelompok" class="control-label"><span class="text-danger">*</span>Kelompok</label>
 								<div class="form-group">
-									<select name="kodeKelompok" class="form-control">
+									<select name="kodeKelompok" class="form-control select2">
 										<?php
 										foreach ($kelompok_ as $value) {
 											$selected = ($value['id'] == $subkelompok['kodeKelompok']) ? ' selected="selected"' : "";

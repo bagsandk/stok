@@ -580,7 +580,7 @@ if ( ! function_exists('timezone_menu'))
 
 		if ($class !== '')
 		{
-			$menu .= ' class="'.$class.'"';
+			$menu .= ' class="select2 '.$class.'"';
 		}
 
 		$menu .= _stringify_attributes($attributes).">\n";

@@ -24,9 +24,9 @@
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/select2.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
-    <script src="<?= base_url() ?>/assets/daricdn/npmchartjs.js"></script>
-    <script src="<?= base_url() ?>/assets/daricdn/chartjslabel.js"></script>
+
 </head>
 
 <body>
@@ -135,6 +135,8 @@
     <!-- Template JS File -->
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/select2.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/advance-form.js"></script>
 
 </body>
 

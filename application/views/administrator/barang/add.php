@@ -19,7 +19,7 @@
 							<div class="col-md-6">
 								<label for="kodeSub" class="control-label"><span class="text-danger">*</span>Sub Kelompok</label>
 								<div class="form-group">
-									<select name="kodeSub" class="form-control">
+									<select name="kodeSub" class="form-control select2">
 										<?php
 
 										foreach ($subkelompok_ as $value) {

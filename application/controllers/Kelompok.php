@@ -26,7 +26,8 @@ class Kelompok extends CI_Controller
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s'),
             );
-            $kelompok_id = $this->Kelompok_model->add_kelompok($params);
+            $text = "Menambahkan data kelompok dengan nama kelompok = '" . $this->input->post('kelompok') . "' dan termasuk golongan " . view('golongan', ['id' => $this->input->post('kodeGol')], 'namaGolongan');
+            $kelompok_id = $this->Kelompok_model->add_kelompok($params, $text);
             if ($kelompok_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
@@ -52,11 +53,14 @@ class Kelompok extends CI_Controller
                     'updatedAt' => date('Y-m-d H:i:s'),
                     'kodeGol' => $this->input->post('kodeGol'),
                 );
-                $kelompok_id = $this->Kelompok_model->update_kelompok($id, $params);
-                if ($kelompok_id) {
-                    alert('success', 'Berhasil...', 'Berhasil mengubah data');
-                } else {
-                    alert('error', 'Gagal...', 'Gagal mengubah data');
+                if ($this->input->post('kelompok') != $data['kelompok']['namaKelompok']) {
+                    $text = "Mengubah nama kelompok dari = '" . $data['kelompok']['namaKelompok'] . "' Ke '" . $this->input->post('kelompok') . "'";
+                    $kelompok_id = $this->Kelompok_model->update_kelompok($id, $params);
+                    if ($kelompok_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
                 }
                 redirect('kelompok/index');
             } else {

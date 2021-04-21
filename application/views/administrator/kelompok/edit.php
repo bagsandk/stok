@@ -19,7 +19,7 @@
 							<div class="col-md-6">
 								<label for="kodeGol" class="control-label"><span class="text-danger">*</span>Golongan</label>
 								<div class="form-group">
-									<select name="kodeGol" class="form-control">
+									<select name="kodeGol" class="form-control select2">
 										<?php
 
 										foreach ($golongan_ as $value) {

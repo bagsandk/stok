@@ -19,7 +19,7 @@
 							<div class="col-md-6">
 								<label for="kodeBarang" class="control-label"><span class="text-danger">*</span>Barang</label>
 								<div class="form-group">
-									<select name="kodeBarang" class="form-control">
+									<select name="kodeBarang" class="form-control select2">
 										<?php
 										foreach ($barang as $value) {
 											$selected = ($value['id'] == view('product', ['id' => $produk_kendaraan['productId']], 'kodeBarang')) ? ' selected="selected"' : "";
@@ -40,7 +40,7 @@
 							<div class="col-md-6">
 								<label for="satuan" class="control-label"><span class="text-danger">*</span>Satuan</label>
 								<div class="form-group">
-									<select name="satuan" class="form-control">
+									<select name="satuan" class="form-control select2">
 										<?php
 										$stauan = ['pcs', 'kg', 'pack', 'dus', 'unit'];
 										foreach ($stauan as $value) {

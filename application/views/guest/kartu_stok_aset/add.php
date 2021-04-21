@@ -12,7 +12,7 @@
 							<div class="col-md-12">
 								<label for="productId" class="control-label"><span class="text-danger">*</span>Produk</label>
 								<div class="form-group">
-									<select name="productId" class="form-control">
+									<select name="productId" class="form-control select2 select2">
 										<?php
 										foreach ($produk as $value) {
 											$selected = ($value['id'] == $this->input->post('productId')) ? ' selected="selected"' : "";
@@ -69,7 +69,7 @@
 							<div class="col-md-6">
 								<label for="hargaPerolehan" class="control-label"><span class="text-danger">*</span>Harga Perolehan</label>
 								<div class="form-group">
-									<input type="text" name="hargaPerolehan" value="<?php echo $this->input->post('hargaPerolehan'); ?>" class="form-control" id="hargaPerolehan" />
+									<input type="text" name="hargaPerolehan" value="<?php echo $this->input->post('hargaPerolehan'); ?>" class="form-control currency" id="hargaPerolehan" />
 									<span class="text-danger"><?php echo form_error('hargaPerolehan'); ?></span>
 								</div>
 							</div>

@@ -14,23 +14,23 @@ class Golongan_model extends CI_Model
         $this->db->order_by('id', 'desc');
         return $this->db->get('golongan')->result_array();
     }
-    function add_golongan($params)
+    function add_golongan($params, $text)
     {
         $r = $this->db->insert('golongan', $params);
-        history('Insert', $this->db->last_query());
+        history('Insert', $text);
         return $r;
     }
-    function update_golongan($id, $params)
+    function update_golongan($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('golongan', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_golongan($id)
+    function delete_golongan($id, $text)
     {
         $r =  $this->db->delete('golongan', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
         return $r;
     }
 }

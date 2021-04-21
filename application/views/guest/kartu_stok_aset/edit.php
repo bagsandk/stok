@@ -12,7 +12,7 @@
 							<div class="col-md-12">
 								<label for="productId" class="control-label"><span class="text-danger">*</span>Produk</label>
 								<div class="form-group">
-									<select name="productId" class="form-control">
+									<select name="productId" class="form-control select2">
 										<?php
 										foreach ($produk as $value) {
 											$selected = ($value['id'] == $kartu_stok_aset['productId']) ? ' selected="selected"' : "";
