@@ -13,6 +13,7 @@
 								<label for="productId" class="control-label"><span class="text-danger">*</span>Produk</label>
 								<div class="form-group">
 									<select name="productId" class="form-control select2 select2">
+										<option value="">Pilih Produk</option>
 										<?php
 										foreach ($produk as $value) {
 											$selected = ($value['id'] == $this->input->post('productId')) ? ' selected="selected"' : "";
@@ -24,12 +25,28 @@
 								</div>
 							</div>
 							<div class="col-md-6">
+								<label for="departement" class="control-label"><span class="text-danger">*</span>Departement</label>
+								<div class="form-group">
+									<select name="departement" class="form-control select2 select2">
+										<option value="">Pilih Departement</option>
+										<?php
+										$departement = ['BAAK','SDM'];
+										foreach ($departement as $value) {
+											$selected = ($value == $this->input->post('departement')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
+										}
+										?>
+									</select>
+									<span class="text-danger"><?php echo form_error('departement'); ?></span>
+								</div>
+							</div>
+							<!-- <div class="col-md-6">
 								<label for="noInventaris" class="control-label"><span class="text-danger">*</span>No Inventaris</label>
 								<div class="form-group">
 									<input type="text" name="noInventaris" value="<?php echo $this->input->post('noInventaris'); ?>" class="form-control" id="noInventaris" />
 									<span class="text-danger"><?php echo form_error('noInventaris'); ?></span>
 								</div>
-							</div>
+							</div> -->
 							<div class="col-md-6">
 								<label for="noPo" class="control-label"><span class="text-danger">*</span>No PO</label>
 								<div class="form-group">
@@ -193,7 +210,7 @@
 										</div>
 									</div>
 								</div>
-								<?php ?> 
+								<?php ?>
 								<?php if (!empty($this->input->post('nama')) && count($this->input->post('nama')) > 1) {
 									foreach ($this->input->post('nama') as $i => $nom) { ?>
 										<?php if ($i == 0) {

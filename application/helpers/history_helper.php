@@ -100,3 +100,29 @@ function timeAgo($time_ago)
         }
     }
 }
+function getInventaris($departement)
+{
+    $CI = &get_instance();
+    $get = $CI->db->like('noInventaris', $departement, 'boot')->order_by('noInventaris', 'desc')->get('kartu_stok_aset')->row_array();
+    if ($get != null) {
+        $last = $get['noInventaris'];
+        $x = explode('-', $last);
+        $invID = $x[0] + 1;
+    } else {
+        $invID = 1;
+    }
+    $invID = str_pad($invID, 4, '0', STR_PAD_LEFT);
+    $newInv = $invID . '-' . $departement . '-' . getMonthRomawi(date('n')) . '-' . date('Y');
+    return $newInv;
+}
+function getMonthRomawi($m)
+{
+    $roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    $result = '';
+    foreach ($roman as $i => $r) {
+        if (($i + 1) == $m) {
+            $result .= $r;
+        }
+    }
+    return $result;
+}

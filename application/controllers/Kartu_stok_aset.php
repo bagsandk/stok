@@ -18,7 +18,7 @@ class Kartu_stok_aset extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
-        $this->form_validation->set_rules('noInventaris', 'No Inventaris', 'required|max_length[100]|is_unique[kartu_stok_aset.noInventaris]');
+        $this->form_validation->set_rules('departement', 'Departement', 'required|max_length[100]');
         $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
         $this->form_validation->set_rules('hargaPerolehan', 'Harga perlolehan', 'required|max_length[100]');
         $this->form_validation->set_rules('masaManfaat', 'Masa manfaat', 'required|max_length[100]');
@@ -43,11 +43,12 @@ class Kartu_stok_aset extends CI_Controller
         if ($this->form_validation->run()) {
             // var_dump($_POST);
             // die;
+            $newInv = getInventaris($this->input->post('departement'));
             $asset = array(
                 'productId' => $this->input->post('productId'),
-                'noInventaris' => $this->input->post('noInventaris'),
+                'noInventaris' => $newInv,
                 'ruang' => $this->input->post('ruang'),
-                'hargaPerolehan' => $this->input->post('hargaPerolehan'),
+                'hargaPerolehan' => str_replace(',', '', $this->input->post('hargaPerolehan')),
                 'masaManfaat' => $this->input->post('masaManfaat'),
                 'supplier' => $this->input->post('supplier'),
                 'pengguna' => $this->input->post('pengguna'),
@@ -61,7 +62,7 @@ class Kartu_stok_aset extends CI_Controller
             $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset);
             if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
                 $garansi = [
-                    'noInventaris' => $this->input->post('noInventaris'),
+                    'noInventaris' => $newInv,
                     'noKartuGaransi' => $this->input->post('noKartuGaransi'),
                     'jenisGaransi' => $this->input->post('jenisGaransi'),
                     'masaGaransi' => $this->input->post('masaGaransi'),
@@ -75,7 +76,7 @@ class Kartu_stok_aset extends CI_Controller
                     'alamatStnk' => $this->input->post('alamatStnk'),
                     'peruntukan' => $this->input->post('peruntukan'),
                     'createdAt' => date('Y-m-d H:i:s'),
-                    'ksa' => $this->input->post('noInventaris'),
+                    'ksa' => $newInv,
                 ];
                 $this->Kartu_stok_aset_model->add_ksa_kendaraan($kendaraan);
             }
@@ -86,7 +87,7 @@ class Kartu_stok_aset extends CI_Controller
                         'nama' => $this->input->post('nama[' . $i . ']'),
                         'nomor' => $this->input->post('nomor[' . $i . ']'),
                         'createdAt' => date('Y-m-d H:i:s'),
-                        'ksa' => $this->input->post('noInventaris'),
+                        'ksa' => $newInv,
                     ];
                     $this->Kartu_stok_aset_model->add_ksa_nomor($nomor);
                 }
@@ -141,7 +142,7 @@ class Kartu_stok_aset extends CI_Controller
                     'productId' => $this->input->post('productId'),
                     'noInventaris' => $this->input->post('noInventaris'),
                     'ruang' => $this->input->post('ruang'),
-                    'hargaPerolehan' => $this->input->post('hargaPerolehan'),
+                    'hargaPerolehan' => str_replace(',', '', $this->input->post('hargaPerolehan')),
                     'masaManfaat' => $this->input->post('masaManfaat'),
                     'supplier' => $this->input->post('supplier'),
                     'pengguna' => $this->input->post('pengguna'),

@@ -38,7 +38,7 @@ class Kartu_stok_non_aset extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeBarang' => $this->input->post('kodeBarang'),
             );
-            $produk_id = $this->Produk_model->add_produk($params0);
+            $produk_id = $this->Kartu_stok_non_aset_model->add_produk($params0);
             $params = array(
                 'lokasiGudang' => $this->input->post('lokasiGudang'),
                 'lokasiRak' => $this->input->post('lokasiRak'),
@@ -50,7 +50,18 @@ class Kartu_stok_non_aset extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'productId' => $produk_id,
             );
-            $in = $this->Kartu_stok_non_aset_model->add_kartu_stok_non_aset($params);
+            $relation = [
+                [
+                    'table' => 'barang',
+                    'field' => ['namaBarang'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeBarang'),
+                ]
+            ];
+            $text = text('Insert', 'kartu_stok_non_aset', ['nama', 'gambar','merek','satuan','deskripsi','lokasiGudang','lokasiRak','satuan','jumlahStok','hargaRerata','saldoMin'], $relation, $_POST, []);
+            // var_dump($_POST);
+            // die;
+            $in = $this->Kartu_stok_non_aset_model->add_kartu_stok_non_aset($params,$text);
             if ($in) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
@@ -66,7 +77,7 @@ class Kartu_stok_non_aset extends CI_Controller
     function edit($id)
     {
         $data['kartu_stok_non_aset'] = $this->Kartu_stok_non_aset_model->get_kartu_stok_non_aset($id);
-        if (isset($data['produk_kendaraan']['id'])) {
+        if (isset($data['kartu_stok_non_aset']['id'])) {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
             $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');

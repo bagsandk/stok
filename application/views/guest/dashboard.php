@@ -50,6 +50,7 @@
                                             if($tabel == 'golongan'){
                                                 $tabelText = 'Golongan';
                                             }
+                                            
                                         }
                                         if ($h['type'] == 'Delete') {
                                         }

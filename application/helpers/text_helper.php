@@ -4,7 +4,7 @@
 function text(string $type, string $table, array $field = [], array $relation = [], array $firstValue = [], array $secondValue = []): string
 {
     if ($type == 'Insert') {
-        if ($table != 'product_kendaraan' && $table != 'kartu_stok_non_aset' && $table != 'kartu_stok_aset' && $table != 'product') {
+        if ($table != 'product_kendaraan' && $table != 'kartu_stok_non_aset' && $table != 'kartu_stok_aset') {
             if ($relation == null) {
                 $isi = [];
                 foreach ($firstValue as $key => $val) {
@@ -36,7 +36,30 @@ function text(string $type, string $table, array $field = [], array $relation = 
                 $rel = implode(', ', $yy);
                 $text = 'Menambahkan data ' . ucfirst(str_replace('_', ' ', $table)) . ' dengan nilai ' . $nil . $end . $rel;
             }
-        } else {
+        } elseif ($table != 'kartu_stok_aset' && $table != 'product_kendaraan') {
+            $isi = [];
+            foreach ($firstValue as $key => $val) {
+                if (in_array($key, $field)) {
+                    array_push($isi, ucfirst(str_replace('_', ' ', $key)) . ' = ' . $val);
+                }
+            }
+            
+            $end = ' dan termasuk ke dalam ';
+            $yy = [];
+            foreach ($relation as $key => $val) {
+                $temp = [];
+                foreach ($val['field'] as $k => $v) {
+                    array_push($temp, ucfirst(str_replace('_', ' ', $v)) . ' = ' . view($val['table'], [$val['pk'] => $val['valuePk']], $v));
+                }
+                $im = implode(', ', $temp);
+                $textTemp = $val['table'] . ' dengan ' . $im;
+                array_push($yy, $textTemp);
+            }
+            $nil = implode(', ', $isi);
+            $rel = implode(', ', $yy);
+            $text = 'Menambahkan data ' . ucfirst(str_replace('_', ' ', $table)) . ' dengan nilai ' . $nil . $end . $rel;
+            // var_dump($text);
+            // die;
         }
     }
     if ($type == 'Update') {

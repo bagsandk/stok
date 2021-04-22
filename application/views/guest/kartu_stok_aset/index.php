@@ -37,7 +37,7 @@
                                           <tr>
                                               <td><?php echo $no; ?></td>
                                               <td><?= $t['noInventaris']; ?></td>
-                                              <td><?= $t['hargaPerolehan']; ?></td>
+                                              <td><?= 'Rp ' . number_format($t['hargaPerolehan']); ?></td>
                                               <td><?= $t['masaManfaat']; ?></td>
                                               <td><?= $t['supplier']; ?></td>
                                               <td><?= $t['pengguna']; ?></td>

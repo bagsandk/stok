@@ -172,7 +172,16 @@
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/select2.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/advance-form.js"></script>
+    <script src="<?php echo base_url(); ?>assets/dist/cleave.min.js"></script>
+    <script>
+        var cleaveC = new Cleave('.currency', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cleaveC = new Cleave('.number', {
+            numeral: true,
+        });
+    </script>
 
 
 </body>
