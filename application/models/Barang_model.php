@@ -14,23 +14,23 @@ class Barang_model extends CI_Model
         $this->db->order_by('id', 'desc');
         return $this->db->get('barang')->result_array();
     }
-    function add_barang($params)
+    function add_barang($params, $text)
     {
         $r = $this->db->insert('barang', $params);
-        history('Insert', $this->db->last_query());
+        history('Insert', $text);
         return $r;
     }
-    function update_barang($id, $params)
+    function update_barang($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('barang', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_barang($id)
+    function delete_barang($id, $text)
     {
         $r =  $this->db->delete('barang', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
         return $r;
     }
 }

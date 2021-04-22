@@ -14,23 +14,23 @@ class Produk_model extends CI_Model
         $this->db->order_by('createdAt', 'desc');
         return $this->db->get('product')->result_array();
     }
-    function add_produk($params)
+    function add_produk($params, $text)
     {
         $r = $this->db->insert('product', $params);
-        history('Insert', $this->db->last_query());
-        return $this->db->order_by('createdAt', 'desc')->get('product',1)->row_array()['id'];
+        history('Insert', $text);
+        return $this->db->order_by('createdAt', 'desc')->get('product', 1)->row_array()['id'];
     }
-    function update_produk($id, $params)
+    function update_produk($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('product', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_produk($id)
+    function delete_produk($id, $text)
     {
         $r =  $this->db->delete('product', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
         return $r;
     }
 }

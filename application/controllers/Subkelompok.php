@@ -26,7 +26,16 @@ class Subkelompok extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeKelompok' => $this->input->post('kodeKelompok'),
             );
-            $subkelompok_id = $this->Subkelompok_model->add_subkelompok($params);
+            $relation = [
+                [
+                    'table' => 'kelompok',
+                    'field' => ['namaKelompok'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeKelompok'),
+                ]
+            ];
+            $text = text('Insert', 'sub_kelompok', ['namaSub', 'kodeKelompok'], $relation, $_POST, []);
+            $subkelompok_id = $this->Subkelompok_model->add_subkelompok($params, $text);
             if ($subkelompok_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
@@ -52,12 +61,26 @@ class Subkelompok extends CI_Controller
                     'updatedAt' => date('Y-m-d H:i:s'),
                     'kodeKelompok' => $this->input->post('kodeKelompok'),
                 );
-                $subkelompok_id = $this->Subkelompok_model->update_subkelompok($id, $params);
-                if ($subkelompok_id) {
-                    alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                $relation = [
+                    [
+                        'table' => 'kelompok',
+                        'field' => ['namaKelompok'],
+                        'pk' => 'id',
+                        'valuePk' => $this->input->post('kodeKelompok'),
+                    ]
+                ];
+                $text = text('Update', 'sub_kelompok', ['namaSub', 'kodeKelompok'], $relation, $data['subkelompok'], $_POST);
+                if ($text != '') {
+                    $subkelompok_id = $this->Subkelompok_model->update_subkelompok($id, $params, $text);
+                    if ($subkelompok_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
                 } else {
-                    alert('error', 'Gagal...', 'Gagal mengubah data');
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
                 }
+
                 redirect('subkelompok/index');
             } else {
                 $data['kelompok_'] = $this->Kelompok_model->get_all_kelompok_();
@@ -76,7 +99,8 @@ class Subkelompok extends CI_Controller
         if (isset($subkelompok['id'])) {
             $cek = $this->Global_model->get_data('barang', ['kodeSub' => $id], false);
             if ($cek == null) {
-                $subkelompok_id =  $this->Subkelompok_model->delete_subkelompok($id);;
+                $text = text('Delete', 'sub_kelompok', ['id', 'namaSub', 'kodeKelompok'], [], $subkelompok, []);
+                $subkelompok_id =  $this->Subkelompok_model->delete_subkelompok($id, $text);
                 if ($subkelompok_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {

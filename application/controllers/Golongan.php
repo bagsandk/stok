@@ -16,14 +16,15 @@ class Golongan extends CI_Controller
     function add()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('golongan', 'golongan', 'required|max_length[100]');
+        $this->form_validation->set_rules('namaGolongan', 'golongan', 'required|max_length[100]');
         if ($this->form_validation->run()) {
             $params = array(
-                'namaGolongan' => $this->input->post('golongan'),
+                'namaGolongan' => $this->input->post('namaGolongan'),
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s')
             );
-            $text = "Menambahkan data golongan dengan nama golongan = '" . $this->input->post('golongan') . "'";
+            $text = text('Insert', 'golongan', ['namaGolongan'], [], $_POST, []);
+
             $golongan_id = $this->Golongan_model->add_golongan($params, $text);
             if ($golongan_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
@@ -41,14 +42,14 @@ class Golongan extends CI_Controller
         $data['golongan'] = $this->Golongan_model->get_golongan($id);
         if (isset($data['golongan']['id'])) {
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('golongan', 'golongan', 'required|max_length[100]');
+            $this->form_validation->set_rules('namaGolongan', 'Golongan', 'required|max_length[100]');
             if ($this->form_validation->run()) {
                 $params = array(
-                    'namaGolongan' => $this->input->post('golongan'),
+                    'namaGolongan' => $this->input->post('namaGolongan'),
                     'updatedAt' => date('Y-m-d H:i:s')
                 );
-                if ($this->input->post('golongan') != $data['golongan']['namaGolongan']) {
-                    $text = "Mengubah nama golongan dari = '" . $data['golongan']['namaGolongan'] . "' Ke '" . $this->input->post('golongan') . "'";
+                $text = text('Update', 'golongan', ['namaGolongan'], [], $data['golongan'], $_POST);
+                if ($text != '') {
                     $golongan_id = $this->Golongan_model->update_golongan($id, $params, $text);
                     if ($golongan_id) {
                         alert('success', 'Berhasil...', 'Berhasil mengubah data');
@@ -76,7 +77,7 @@ class Golongan extends CI_Controller
         if (isset($golongan['id'])) {
             $cek = $this->Global_model->get_data('kelompok', ['kodeGol' => $id], false);
             if ($cek == null) {
-                $text = "Menghapus data golongan dengan nama golongan = '" . $golongan['namaGolongan'] . "'";
+                $text = text('Delete', 'golongan', ['id', 'namaGolongan'], [], $golongan, []);
                 $golongan_id = $this->Golongan_model->delete_golongan($id, $text);
                 if ($golongan_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');

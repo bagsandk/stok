@@ -26,7 +26,16 @@ class Barang extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeSub' => $this->input->post('kodeSub'),
             );
-            $barang_id = $this->Barang_model->add_barang($params);
+            $relation = [
+                [
+                    'table' => 'sub_kelompok',
+                    'field' => ['namaSub'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeSub'),
+                ]
+            ];
+            $text = text('Insert', 'barang', ['namaBarang', 'kodeSub'], $relation, $_POST, []);
+            $barang_id = $this->Barang_model->add_barang($params, $text);
             if ($barang_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
             } else {
@@ -52,11 +61,24 @@ class Barang extends CI_Controller
                     'updatedAt' => date('Y-m-d H:i:s'),
                     'kodeSub' => $this->input->post('kodeSub'),
                 );
-                $barang_id = $this->Barang_model->update_barang($id, $params);
-                if ($barang_id) {
-                    alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                $relation = [
+                    [
+                        'table' => 'sub_kelompok',
+                        'field' => ['namaSub'],
+                        'pk' => 'id',
+                        'valuePk' => $this->input->post('kodeSub'),
+                    ]
+                ];
+                $text = text('Update', 'barang', ['namaBarang', 'kodeSub'], $relation, $data['barang'], $_POST);
+                if ($text != '') {
+                    $barang_id = $this->Barang_model->update_barang($id, $params, $text);
+                    if ($barang_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
                 } else {
-                    alert('error', 'Gagal...', 'Gagal mengubah data');
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
                 }
                 redirect('barang/index');
             } else {
@@ -76,7 +98,8 @@ class Barang extends CI_Controller
         if (isset($barang['id'])) {
             $cek = $this->Global_model->get_data('product', ['kodeBarang' => $id], false);
             if ($cek == null) {
-                $barang_id = $this->Barang_model->delete_barang($id);;
+                $text = text('Delete', 'barang', ['id', 'namaBarang', 'kodeSub'], [], $barang, []);
+                $barang_id = $this->Barang_model->delete_barang($id, $text);
                 if ($barang_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {

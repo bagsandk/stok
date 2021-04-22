@@ -10,10 +10,10 @@
 						<?php echo form_open('kelompok/add'); ?>
 						<div class="row">
 							<div class="col-md-6">
-								<label for="kelompok" class="control-label"><span class="text-danger">*</span>Kelompok</label>
+								<label for="namaKelompok" class="control-label"><span class="text-danger">*</span>Kelompok</label>
 								<div class="form-group">
-									<input type="text" name="kelompok" value="<?php echo $this->input->post('kelompok'); ?>" class="form-control" id="kelompok" />
-									<span class="text-danger"><?php echo form_error('kelompok'); ?></span>
+									<input type="text" name="namaKelompok" value="<?php echo $this->input->post('namaKelompok'); ?>" class="form-control" id="namaKelompok" />
+									<span class="text-danger"><?php echo form_error('namaKelompok'); ?></span>
 								</div>
 							</div>
 							<div class="col-md-6">

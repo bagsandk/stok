@@ -33,7 +33,21 @@ class Produk extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeBarang' => $this->input->post('kodeBarang'),
             );
-            $produk_id = $this->Produk_model->add_produk($params);
+            $relation = [
+                [
+                    'table' => 'barang',
+                    'field' => ['namaBarang'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeBarang'),
+                ]
+            ];
+            $text = text('Insert', 'product', ['nama', 'merek', 'satuan', 'deskripsi', 'gambar', 'kodeBarang'], $relation, $_POST, []);
+            $produk_id = $this->Produk_model->add_produk($params, $text);
+            if ($produk_id) {
+                alert('success', 'Berhasil...', 'Berhasil menambahkan data');
+            } else {
+                alert('error', 'Gagal...', 'Gagal menambahkan data');
+            }
             redirect('produk/index');
         } else {
             $data['barang'] = $this->Barang_model->get_all_barang_();
@@ -60,7 +74,25 @@ class Produk extends CI_Controller
                     'updatedAt' => date('Y-m-d H:i:s'),
                     'kodeBarang' => $this->input->post('kodeBarang'),
                 );
-                $this->Produk_model->update_produk($id, $params);
+                $relation = [
+                    [
+                        'table' => 'barang',
+                        'field' => ['namaBarang'],
+                        'pk' => 'id',
+                        'valuePk' => $this->input->post('kodeBarang'),
+                    ]
+                ];
+                $text = text('Update', 'product', ['nama', 'merek', 'satuan', 'deskripsi', 'gambar', 'kodeBarang'], $relation, $data['produk'], $_POST);
+                if ($text != '') {
+                    $produk_id = $this->Produk_model->update_produk($id, $params, $text);
+                    if ($produk_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
+                } else {
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
+                }
                 redirect('produk/index');
             } else {
                 $data['barang'] = $this->Barang_model->get_all_barang_();
@@ -76,7 +108,8 @@ class Produk extends CI_Controller
         if (isset($produk['id'])) {
             $cek = $this->Global_model->get_data('product_kendaraan', ['productId' => $id], false);
             if ($cek == null) {
-                $product_id = $this->Produk_model->delete_produk($id);
+                $text = text('Delete', 'product', ['id', 'nama', 'merek', 'satuan', 'deskripsi', 'gambar', 'kodeBarang'], [], $produk, []);
+                $product_id = $this->Produk_model->delete_produk($id, $text);
                 if ($product_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {

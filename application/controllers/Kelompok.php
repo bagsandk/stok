@@ -17,16 +17,24 @@ class Kelompok extends CI_Controller
     function add()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('kelompok', 'kelompok', 'required|max_length[100]');
+        $this->form_validation->set_rules('namaKelompok', 'namaKelompok', 'required|max_length[100]');
         $this->form_validation->set_rules('kodeGol', 'Kode Golongan', 'required');
         if ($this->form_validation->run()) {
             $params = array(
-                'namaKelompok' => $this->input->post('kelompok'),
+                'namaKelompok' => $this->input->post('namaKelompok'),
                 'kodeGol' => $this->input->post('kodeGol'),
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s'),
             );
-            $text = "Menambahkan data kelompok dengan nama kelompok = '" . $this->input->post('kelompok') . "' dan termasuk golongan " . view('golongan', ['id' => $this->input->post('kodeGol')], 'namaGolongan');
+            $relation = [
+                [
+                    'table' => 'golongan',
+                    'field' => ['namaGolongan'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeGol'),
+                ]
+            ];
+            $text = text('Insert', 'kelompok', ['namaKelompok', 'kodeGol'], $relation, $_POST, []);
             $kelompok_id = $this->Kelompok_model->add_kelompok($params, $text);
             if ($kelompok_id) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
@@ -45,22 +53,35 @@ class Kelompok extends CI_Controller
         $data['kelompok'] = $this->Kelompok_model->get_kelompok($id);
         if (isset($data['kelompok']['id'])) {
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('kelompok', 'kelompok', 'required|max_length[100]');
+            $this->form_validation->set_rules('namaKelompok', 'namaKelompok', 'required|max_length[100]');
             $this->form_validation->set_rules('kodeGol', 'Kode Golongan', 'required');
             if ($this->form_validation->run()) {
                 $params = array(
-                    'namaKelompok' => $this->input->post('kelompok'),
+                    'namaKelompok' => $this->input->post('namaKelompok'),
                     'updatedAt' => date('Y-m-d H:i:s'),
                     'kodeGol' => $this->input->post('kodeGol'),
                 );
-                if ($this->input->post('kelompok') != $data['kelompok']['namaKelompok']) {
-                    $text = "Mengubah nama kelompok dari = '" . $data['kelompok']['namaKelompok'] . "' Ke '" . $this->input->post('kelompok') . "'";
-                    $kelompok_id = $this->Kelompok_model->update_kelompok($id, $params);
+                $relation = [
+                    [
+                        'table' => 'golongan',
+                        'field' => ['namaGolongan'],
+                        'pk' => 'id',
+                        'valuePk' => $this->input->post('kodeGol'),
+                    ]
+                ];
+                // var_dump($data['kelompok']);
+                // var_dump($_POST);
+                // die;
+                $text = text('Update', 'kelompok', ['namaKelompok', 'kodeGol'], $relation, $data['kelompok'], $_POST);
+                if ($text != '') {
+                    $kelompok_id = $this->Kelompok_model->update_kelompok($id, $params, $text);
                     if ($kelompok_id) {
                         alert('success', 'Berhasil...', 'Berhasil mengubah data');
                     } else {
                         alert('error', 'Gagal...', 'Gagal mengubah data');
                     }
+                } else {
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
                 }
                 redirect('kelompok/index');
             } else {
@@ -80,7 +101,8 @@ class Kelompok extends CI_Controller
         if (isset($kelompok['id'])) {
             $cek = $this->Global_model->get_data('sub_kelompok', ['kodeKelompok' => $id], false);
             if ($cek == null) {
-                $kelompok_id = $this->Kelompok_model->delete_kelompok($id);
+                $text = text('Delete', 'kelompok', ['id', 'namaKelompok', 'kodeGol'], [], $kelompok, []);
+                $kelompok_id = $this->Kelompok_model->delete_kelompok($id, $text);
                 if ($kelompok_id) {
                     alert('success', 'Berhasil...', 'Berhasil menghapus data');
                 } else {

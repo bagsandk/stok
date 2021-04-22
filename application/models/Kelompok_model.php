@@ -13,23 +13,23 @@ class Kelompok_model extends CI_Model
     {
         return $this->db->get('kelompok')->result_array();
     }
-    function add_kelompok($params)
+    function add_kelompok($params, $text)
     {
         $r = $this->db->insert('kelompok', $params);
-        history('Insert', $this->db->last_query());
+        history('Insert', $text);
         return $r;
     }
-    function update_kelompok($id, $params)
+    function update_kelompok($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('kelompok', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_kelompok($id)
+    function delete_kelompok($id, $text)
     {
         $r =  $this->db->delete('kelompok', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
         return $r;
     }
 }

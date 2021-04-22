@@ -10,10 +10,10 @@
 						<?php echo form_open('golongan/edit/' . $this->uri->segment(3)); ?>
 						<div class="row">
 							<div class="col-md-6">
-								<label for="golongan" class="control-label"><span class="text-danger">*</span>Golongan</label>
+								<label for="namaGolongan" class="control-label"><span class="text-danger">*</span>Golongan</label>
 								<div class="form-group">
-									<input type="text" name="golongan" value="<?php echo ($this->input->post('golongan') ? $this->input->post('golongan') : $golongan['namaGolongan']); ?>" class="form-control" id="golongan" />
-									<span class="text-danger"><?php echo form_error('golongan'); ?></span>
+									<input type="text" name="namaGolongan" value="<?php echo ($this->input->post('namaGolongan') ? $this->input->post('namaGolongan') : $golongan['namaGolongan']); ?>" class="form-control" id="namaGolongan" />
+									<span class="text-danger"><?php echo form_error('namaGolongan'); ?></span>
 								</div>
 							</div>
 						</div>
