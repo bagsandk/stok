@@ -15,17 +15,10 @@ class Guest extends CI_Controller
             ->join('users', 'users.user_id=history.user_id')
             ->order_by('log_date', 'DESC')
             ->limit(7)
-            ->group_start()
-            ->like('query', 'golongan')
-            ->or_like('query', 'kelompok')
-            ->or_like('query', 'sub_kelompok')
-            ->or_like('query', 'barang')
-            ->or_like('query', 'product')
-            ->or_like('query', 'product_kendaraan')
-            ->or_like('query', 'kartu_stok_non_aset')
-            ->or_like('query', 'kartu_stok_aset')
-            ->group_end()
             ->get_where('history', ['history.user_id' => $this->session->userdata('user_id')])->result_array();
+        $data['insert'] = count($this->Global_model->get_data('history', ['history.user_id' => $this->session->userdata('user_id'), 'type' => 'Insert']));
+        $data['update'] = count($this->Global_model->get_data('history', ['history.user_id' => $this->session->userdata('user_id'), 'type' => 'Update']));
+        $data['delete'] = count($this->Global_model->get_data('history', ['history.user_id' => $this->session->userdata('user_id'), 'type' => 'Delete']));
         $data['_view'] = 'guest/dashboard';
         $this->load->view('guest/layouts/main', $data);
     }

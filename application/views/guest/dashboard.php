@@ -1,10 +1,55 @@
 <section class="section">
     <div class="section-header">
-        <h1>DATA HISTORY</h1>
+        <h1>DASHBOARD</h1>
     </div>
     <div class="section-body">
         <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-success">
+                        <i class="fa fa-plus fa-2x" style="color:white"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Total Insert</h4>
+                        </div>
+                        <div class="card-body">
+                            <?= $insert; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-warning">
+                        <i class="fa fa-pen fa-2x" style="color:white"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Total Update</h4>
+                        </div>
+                        <div class="card-body">
+                            <?= $update; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-danger">
+                        <i class="fa fa-trash fa-2x" style="color:white"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Total Delete</h4>
+                        </div>
+                        <div class="card-body">
+                            <?= $delete; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6">
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12">
                 <div class="card">
@@ -19,46 +64,7 @@
                                     <div class="media-body">
                                         <div class="float-right text-primary"><?php echo timeAgo($h['log_date']); ?></div>
                                         <div class="media-title"><?php echo $h['first_name'] . " " . $h['last_name']; ?></div>
-                                        <?php
-                                        if ($h['type'] == 'Insert') {
-                                            $text = "Menambahkan data pada tabel ";
-                                            $string = explode("VALUES", $h['query']);
-                                            // satu 
-                                            $stringAwal = explode(" ", $string[0]);
-                                            $tabel = str_replace('"', '', $stringAwal[2]);
-                                            if($tabel == 'kartu_stok_aset'){
-                                                $tabelText = 'Kartu Stok Aset';
-                                            }
-                                            if($tabel == 'kartu_stok_non_aset'){
-                                                $tabelText = 'Kartu Stok Non Aset';
-                                            }
-                                            if($tabel == 'product'){
-                                                $tabelText = 'Produk';
-                                            }
-                                            if($tabel == 'product_kendaraan'){
-                                                $tabelText = 'Produk Kendaraan';
-                                            }
-                                            if($tabel == 'barang'){
-                                                $tabelText = 'Barang';
-                                            }
-                                            if($tabel == 'sub_kelompok'){
-                                                $tabelText = 'Sub Kelompok';
-                                            }
-                                            if($tabel == 'kelompok'){
-                                                $tabelText = 'Kelompok';
-                                            }
-                                            if($tabel == 'golongan'){
-                                                $tabelText = 'Golongan';
-                                            }
-                                            
-                                        }
-                                        if ($h['type'] == 'Delete') {
-                                        }
-                                        if ($h['type'] == 'Update') {
-                                        }
-
-                                        ?>
-                                        <span class="text-small text-muted">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</span>
+                                        <span class="text-small text-muted"><?php echo $h['query']; ?></span>
                                     </div>
                                 </li>
                             <?php } ?>

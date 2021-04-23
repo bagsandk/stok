@@ -59,7 +59,16 @@ class Kartu_stok_aset extends CI_Controller
                 'isWaranty' => $this->input->post('isWaranty'),
                 'createdAt' => date('Y-m-d H:i:s'),
             );
-            $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset);
+            $relation = [
+                [
+                    'table' => 'barang',
+                    'field' => ['namaBarang'],
+                    'pk' => 'id',
+                    'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
+                ]
+            ];
+            $text = text('Insert', 'kartu_stok_aset', ['namaStnk', 'alamatStnk', 'peruntukan', 'noKartuGaransi', 'jenisGaransi', 'noInventaris', 'masaGaransi', 'ruang', 'hargaPerolehan', 'masaManfaat', 'supplier', 'pengguna', 'noPo', 'statusPerolehan', 'lokasi', 'kondisi', 'isWaranty'], $relation, $_POST, []);
+            $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset, $text);
             if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
                 $garansi = [
                     'noInventaris' => $newInv,
@@ -112,6 +121,7 @@ class Kartu_stok_aset extends CI_Controller
         $data['ksa_kendaraan'] = $this->Kartu_stok_aset_model->get_ksa_kendaraan($id);
         if (isset($data['kartu_stok_aset']['noInventaris'])) {
             $this->load->library('form_validation');
+            $da = array_merge($data['kartu_stok_aset'], $data['kartu_garansi'], $data['ksa_kendaraan']);
             $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
             $this->form_validation->set_rules('noInventaris', 'No Inventaris', 'required|max_length[100]');
             $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
@@ -153,7 +163,16 @@ class Kartu_stok_aset extends CI_Controller
                     'isWaranty' => $this->input->post('isWaranty'),
                     'updatedAt' => date('Y-m-d H:i:s'),
                 );
-                $noInventaris = $this->Kartu_stok_aset_model->update_kartu_stok_aset($id, $asset);
+                $relation = [
+                    [
+                        'table' => 'barang',
+                        'field' => ['namaBarang'],
+                        'pk' => 'id',
+                        'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
+                    ]
+                ];
+                $text = text('Update', 'kartu_stok_aset', ['namaStnk', 'alamatStnk', 'peruntukan', 'noKartuGaransi', 'jenisGaransi', 'noInventaris', 'masaGaransi', 'ruang', 'hargaPerolehan', 'masaManfaat', 'supplier', 'pengguna', 'noPo', 'statusPerolehan', 'lokasi', 'kondisi', 'isWaranty'], $relation, $da, $_POST);
+                $noInventaris = $this->Kartu_stok_aset_model->update_kartu_stok_aset($id, $asset, $text);
                 if ($data['kartu_garansi'] != null) {
                     if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
                         $garansi = [
@@ -268,6 +287,8 @@ class Kartu_stok_aset extends CI_Controller
             $cekGaransi = $this->Global_model->get_data('kartu_garansi', ['noInventaris' => $kartu_stok_aset['noInventaris']], false);
             $cekKendaraan = $this->Global_model->get_data('ksa_kendaraan', ['ksa' => $kartu_stok_aset['noInventaris']], false);
             $cekNomor = $this->Global_model->get_data('ksa_nomor', ['ksa' => $kartu_stok_aset['noInventaris']], false);
+            $da = array_merge($kartu_stok_aset, $cekGaransi, $cekKendaraan);
+
             if ($cekGaransi != null) {
                 $this->db->where(['noInventaris' => $id]);
                 $delGaransi = $this->db->delete('kartu_garansi');
@@ -280,7 +301,9 @@ class Kartu_stok_aset extends CI_Controller
                 $this->db->where(['ksa' => $id]);
                 $delNomor = $this->db->delete('ksa_nomor');
             }
-            $del = $this->Kartu_stok_aset_model->delete_kartu_stok_aset($id);
+            $text = text('Insert', 'kartu_stok_aset', ['namaStnk', 'alamatStnk', 'peruntukan', 'noKartuGaransi', 'jenisGaransi', 'noInventaris', 'masaGaransi', 'ruang', 'hargaPerolehan', 'masaManfaat', 'supplier', 'pengguna', 'noPo', 'statusPerolehan', 'lokasi', 'kondisi', 'isWaranty'], [], $da, []);
+
+            $del = $this->Kartu_stok_aset_model->delete_kartu_stok_aset($id, $text);
 
             if ($del) {
                 alert('success', 'Berhasil...', 'Berhasil menghapus data');
