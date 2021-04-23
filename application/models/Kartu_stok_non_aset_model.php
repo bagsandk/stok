@@ -20,17 +20,17 @@ class Kartu_stok_non_aset_model extends CI_Model
         history('Insert', $text);
         return $r;
     }
-    function update_kartu_stok_non_aset($id, $params)
+    function update_kartu_stok_non_aset($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('kartu_stok_non_aset', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_kartu_stok_non_aset($id)
+    function delete_kartu_stok_non_aset($id, $text)
     {
         $r =  $this->db->delete('kartu_stok_non_aset', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
         return $r;
     }
 
@@ -38,5 +38,17 @@ class Kartu_stok_non_aset_model extends CI_Model
     {
         $r = $this->db->insert('product', $params);
         return $this->db->order_by('createdAt', 'desc')->get('product', 1)->row_array()['id'];
+    }
+
+    function update_produk($id, $params)
+    {
+        $this->db->where('id', $id);
+        $r =  $this->db->update('product', $params);
+        return $r;
+    }
+    function delete_produk($id)
+    {
+        $r =  $this->db->delete('product', array('id' => $id));
+        return $r;
     }
 }

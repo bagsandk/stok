@@ -39,7 +39,7 @@ class Produk_kendaraan extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'kodeBarang' => $this->input->post('kodeBarang'),
             );
-            $produk_id = $this->Produk_model->add_produk($params0);
+            $produk_id = $this->Produk_kendaraan_model->add_produk($params0);
             $params = array(
                 'tipe' => $this->input->post('tipe'),
                 'bahanBakar' => $this->input->post('bahanBakar'),
@@ -50,7 +50,21 @@ class Produk_kendaraan extends CI_Controller
                 'updatedAt' => date('Y-m-d H:i:s'),
                 'productId' => $produk_id,
             );
-            $produk_kendaraan_id = $this->Produk_kendaraan_model->add_produk_kendaraan($params);
+            $relation = [
+                [
+                    'table' => 'barang',
+                    'field' => ['namaBarang'],
+                    'pk' => 'id',
+                    'valuePk' => $this->input->post('kodeBarang'),
+                ]
+            ];
+            $text = text('Insert', 'product_kendaraan', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'tipe', 'bahanBakar', 'thPembuatan', 'warna', 'hp'], $relation, $_POST, []);
+            $in = $this->Produk_kendaraan_model->add_produk_kendaraan($params, $text);
+            if ($in) {
+                alert('success', 'Berhasil...', 'Berhasil menambahkan data');
+            } else {
+                alert('error', 'Gagal...', 'Gagal menambahkan data');
+            }
             redirect('produk_kendaraan/index');
         } else {
             $data['barang'] = $this->Barang_model->get_all_barang_();
@@ -62,6 +76,8 @@ class Produk_kendaraan extends CI_Controller
     {
         $data['produk_kendaraan'] = $this->Produk_kendaraan_model->get_produk_kendaraan($id);
         if (isset($data['produk_kendaraan']['id'])) {
+            $da = $this->db->join('product', 'product.id=product_kendaraan.productId')->get_where('product_kendaraan', ['product_kendaraan.id' => $id])->row_array();
+
             $this->load->library('form_validation');
             $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
             $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');
@@ -92,7 +108,25 @@ class Produk_kendaraan extends CI_Controller
                     'hp' => $this->input->post('hp'),
                     'updatedAt' => date('Y-m-d H:i:s'),
                 );
-                $this->Produk_kendaraan_model->update_produk_kendaraan($id, $params);
+                $relation = [
+                    [
+                        'table' => 'barang',
+                        'field' => ['namaBarang'],
+                        'pk' => 'id',
+                        'valuePk' => $this->input->post('kodeBarang'),
+                    ]
+                ];
+                $text = text('Update', 'product_kendaraan', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'tipe', 'bahanBakar', 'thPembuatan', 'warna', 'hp'], $relation, $da, $_POST);
+                if ($text != '') {
+                    $barang_id = $this->Produk_kendaraan_model->update_produk_kendaraan($id, $params, $text);
+                    if ($barang_id) {
+                        alert('success', 'Berhasil...', 'Berhasil mengubah data');
+                    } else {
+                        alert('error', 'Gagal...', 'Gagal mengubah data');
+                    }
+                } else {
+                    alert('info', 'Ubah ?', 'Tidak ada data yang diubah');
+                }
                 redirect('produk_kendaraan/index');
             } else {
                 $data['barang'] = $this->Barang_model->get_all_barang_();
@@ -106,9 +140,29 @@ class Produk_kendaraan extends CI_Controller
     {
         $produk_kendaraan = $this->Produk_kendaraan_model->get_produk_kendaraan($id);
         if (isset($produk_kendaraan['id'])) {
-            $this->Produk_kendaraan_model->delete_produk_kendaraan($id);
+            $cek = $this->Global_model->get_data('product', ['id' => $produk_kendaraan['productId']], false);
+            if ($cek != null) {
+                $da = $this->db->join('product', 'product.id=product_kendaraan.productId')->get_where('product_kendaraan', ['product_kendaraan.id' => $id])->row_array();
+                $text = text('Delete', 'product_kendaraan', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'tipe', 'bahanBakar', 'thPembuatan', 'warna', 'hp'], [], $da, []);
+                $barang_id = $this->Produk_kendaraan_model->delete_produk_kendaraan($id, $text);
+                $product_id = $this->Produk_kendaraan_model->delete_produk($produk_kendaraan['productId']);
+                if ($barang_id && $product_id) {
+                    alert('success', 'Berhasil...', 'Berhasil menghapus data');
+                } else {
+                    alert('error', 'Gagal...', 'Gagal menghapus data');
+                }
+                redirect('produk_kendaraan/index');
+                die;
+            } else {
+                alert('error', 'Gagal...', 'Data yamg ingin dihapus tidak ditemukan');
+                redirect('produk_kendaraan/index');
+                die;
+            }
             redirect('produk_kendaraan/index');
-        } else
-            show_error('The produk_kendaraan you are trying to delete does not exist.');
+        } else {
+            alert('error', 'Gagal...', 'Data yang ingin dihapus tidak ditemukan');
+            redirect('produk_kendaraan/index');
+            die;
+        }
     }
 }

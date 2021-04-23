@@ -7,7 +7,7 @@
 			<div class="col-12 col-md-12 col-lg-12">
 				<div class="card">
 					<div class="card-body">
-						<?php echo form_open('produk_kendaraan/edit/' . $produk_kendaraan['id']); ?>
+						<?php echo form_open('kartu_stok_non_aset/edit/' . $kartu_stok_non_aset['id']); ?>
 						<div class="row">
 							<div class="col-md-6">
 								<label for="nama" class="control-label"><span class="text-danger">*</span>Nama Produk</label>
@@ -69,25 +69,11 @@
 							<div class="col-md-6">
 								<label for="lokasiRak" class="control-label"><span class="text-danger">*</span>Lokasi Rak</label>
 								<div class="form-group">
-									<input type="text" name="lokasiRak" value="<?php echo $this->input->post('loaksiRak') ? $this->input->post('loaksiRak')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'loaksiRak') ?>" class="form-control" id="lokasiRak" />
+									<input type="text" name="lokasiRak" value="<?php echo $this->input->post('lokasiRak') ? $this->input->post('lokasiRak')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'lokasiRak') ?>" class="form-control" id="lokasiRak" />
 									<span class="text-danger"><?php echo form_error('lokasiRak'); ?></span>
 								</div>
 							</div>
-							<!-- <div class="col-md-6">
-								<label for="satuan" class="control-label"><span class="text-danger">*</span>Satuan</label>
-								<div class="form-group">
-									<select name="satuan" class="form-control select2">
-										<?php
-										// $stauan = ['pcs', 'kg', 'pack', 'dus', 'unit'];
-										// foreach ($stauan as $value) {
-										// 	$selected = ($value == $this->input->post('satuan')) ? ' selected="selected"' : "";
-										// 	echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-										// }
-										?>
-									</select>
-									<span class="text-danger"><?php //echo form_error('satuan'); ?></span>
-								</div>
-							</div> -->
+
 							<div class="col-md-6">
 								<label for="jumlahStok" class="control-label"><span class="text-danger">*</span>Jumlah Stok</label>
 								<div class="form-group">

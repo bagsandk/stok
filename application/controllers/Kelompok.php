@@ -69,9 +69,6 @@ class Kelompok extends CI_Controller
                         'valuePk' => $this->input->post('kodeGol'),
                     ]
                 ];
-                // var_dump($data['kelompok']);
-                // var_dump($_POST);
-                // die;
                 $text = text('Update', 'kelompok', ['namaKelompok', 'kodeGol'], $relation, $data['kelompok'], $_POST);
                 if ($text != '') {
                     $kelompok_id = $this->Kelompok_model->update_kelompok($id, $params, $text);

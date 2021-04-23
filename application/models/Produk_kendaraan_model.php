@@ -14,23 +14,42 @@ class Produk_kendaraan_model extends CI_Model
         $this->db->order_by('id', 'desc');
         return $this->db->get('product_kendaraan')->result_array();
     }
-    function add_produk_kendaraan($params)
+    function add_produk_kendaraan($params, $text)
     {
         $r = $this->db->insert('product_kendaraan', $params);
-        history('Insert', $this->db->last_query());
+        history('Insert', $text);
         return $r;
     }
-    function update_produk_kendaraan($id, $params)
+    function update_produk_kendaraan($id, $params, $text)
     {
         $this->db->where('id', $id);
         $r =  $this->db->update('product_kendaraan', $params);
-        history('Update', $this->db->last_query());
+        history('Update', $text);
         return $r;
     }
-    function delete_produk_kendaraan($id)
+    function delete_produk_kendaraan($id, $text)
     {
         $r =  $this->db->delete('product_kendaraan', array('id' => $id));
-        history('Delete', $this->db->last_query());
+        history('Delete', $text);
+        return $r;
+    }
+
+
+    function add_produk($params)
+    {
+        $r = $this->db->insert('product', $params);
+        return $this->db->order_by('createdAt', 'desc')->get('product', 1)->row_array()['id'];
+    }
+
+    function update_produk($id, $params)
+    {
+        $this->db->where('id', $id);
+        $r =  $this->db->update('product', $params);
+        return $r;
+    }
+    function delete_produk($id)
+    {
+        $r =  $this->db->delete('product', array('id' => $id));
         return $r;
     }
 }
