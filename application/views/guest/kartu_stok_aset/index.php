@@ -15,6 +15,7 @@
                                   <thead>
                                       <tr>
                                           <th>No</th>
+                                          <th>QRCode</th>
                                           <th>No Inventasis</th>
                                           <th>harga Perolehan</th>
                                           <th>Masa Manfaat</th>
@@ -30,12 +31,15 @@
                                           <th>Actions</th>
                                       </tr>
                                   </thead>
-                                  <tbody>
+                                  <tbody id="pp">
                                       <?php
                                         $no = 1;
                                         foreach ($kartu_stok_aset_ as $t) { ?>
                                           <tr>
                                               <td><?php echo $no; ?></td>
+                                              <td>
+                                                  <button type="button" class="btn btn-primary btn-sm" data-html="true" data-toggle="popover" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
+                                              </td>
                                               <td><?= $t['noInventaris']; ?></td>
                                               <td><?= 'Rp ' . number_format($t['hargaPerolehan']); ?></td>
                                               <td><?= $t['masaManfaat']; ?></td>
@@ -100,3 +104,11 @@
           </div>
       </div>
   </section>
+
+  <script>
+      $(function() {
+          $('[data-toggle=popover]').popover({
+              html: true
+          })
+      })
+  </script>

@@ -4,6 +4,9 @@ class Subkelompok extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        if($this->session->userdata('isLogIn') != true){
+            redirect('auth/logout');
+        }
         $this->load->model('Subkelompok_model');
         $this->load->model('Kelompok_model');
         $this->load->model('Global_model');

@@ -4,6 +4,9 @@ class Kartu_stok_non_aset extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        if ($this->session->userdata('isLogIn') != true) {
+            redirect('auth/logout');
+        }
         $this->load->model('Kartu_stok_non_aset_model');
         $this->load->model('Barang_model');
         $this->load->model('Produk_model');
@@ -18,6 +21,7 @@ class Kartu_stok_non_aset extends CI_Controller
     function add()
     {
         $this->load->library('form_validation');
+        $this->load->library('ciqrcode');
         $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
         $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');
         $this->form_validation->set_rules('satuan', 'Satuan', 'required|max_length[100]');
@@ -63,6 +67,7 @@ class Kartu_stok_non_aset extends CI_Controller
             $text = text('Insert', 'kartu_stok_non_aset', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $_POST, []);
             // var_dump($_POST);
             // die;
+            
             $in = $this->Kartu_stok_non_aset_model->add_kartu_stok_non_aset($params, $text);
             if ($in) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');

@@ -4,6 +4,9 @@ class Kartu_stok_aset extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        if($this->session->userdata('isLogIn') != true){
+            redirect('auth/logout');
+        }
         $this->load->model('Kartu_stok_aset_model');
         $this->load->model('Produk_model');
         $this->load->model('Global_model');
@@ -67,6 +70,24 @@ class Kartu_stok_aset extends CI_Controller
                     'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
                 ]
             ];
+            $this->load->library('ciqrcode');
+            $config['cacheable']    = true; //boolean, the default is true
+            $config['cachedir']     = './assets/'; //string, the default is application/cache/
+            $config['errorlog']     = './assets/'; //string, the default is application/logs/
+            $config['imagedir']     = './assets/img/'; //direktori penyimpanan qr code
+            $config['quality']      = true; //boolean, the default is true
+            $config['size']         = '1024'; //interger, the default is 1024
+            $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+            $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+            $this->ciqrcode->initialize($config);
+
+            $image_name = $newInv . '.png'; 
+
+            $params['data'] = $newInv; 
+            $params['level'] = 'H'; 
+            $params['size'] = 10;
+            $params['savename'] = FCPATH . $config['imagedir'] . $image_name;
+            $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
             $text = text('Insert', 'kartu_stok_aset', ['namaStnk', 'alamatStnk', 'peruntukan', 'noKartuGaransi', 'jenisGaransi', 'noInventaris', 'masaGaransi', 'ruang', 'hargaPerolehan', 'masaManfaat', 'supplier', 'pengguna', 'noPo', 'statusPerolehan', 'lokasi', 'kondisi', 'isWaranty'], $relation, $_POST, []);
             $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset, $text);
             if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {

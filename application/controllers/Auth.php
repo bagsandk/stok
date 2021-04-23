@@ -57,7 +57,8 @@ class Auth extends CI_Controller
 					'first_name' => $cek['first_name'],
 					'last_name' => $cek['last_name'],
 					'level' => $cek['level'],
-					'profile' => $cek['profile']
+					'profile' => $cek['profile'],
+					'isLogIn' => true,
 				);
 				$this->session->set_userdata($data_session);
 				if ($cek['level'] == 'Super_Admin') {
@@ -211,5 +212,4 @@ class Auth extends CI_Controller
 			redirect('auth');
 		}
 	}
-
 }

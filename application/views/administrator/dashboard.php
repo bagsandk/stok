@@ -4,7 +4,7 @@
     </div>
     <div class="section-body">
         <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-success">
                         <i class="fa fa-plus fa-2x" style="color:white"></i>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-warning">
                         <i class="fa fa-pen fa-2x" style="color:white"></i>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-danger">
                         <i class="fa fa-trash fa-2x" style="color:white"></i>
@@ -49,9 +49,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
             </div>
-            <div class="col-lg-4 col-md-12 col-sm-12">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Recent Activities</h4>

@@ -4,6 +4,9 @@ class Produk extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        if($this->session->userdata('isLogIn') != true){
+            redirect('auth/logout');
+        }
         $this->load->model('Produk_model');
         $this->load->model('Barang_model');
         $this->load->model('Global_model');
