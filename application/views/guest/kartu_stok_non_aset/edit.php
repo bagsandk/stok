@@ -9,54 +9,18 @@
 					<div class="card-body">
 						<?php echo form_open('kartu_stok_non_aset/edit/' . $kartu_stok_non_aset['id']); ?>
 						<div class="row">
-							<div class="col-md-6">
-								<label for="nama" class="control-label"><span class="text-danger">*</span>Nama Produk</label>
+							<div class="col-md-12">
+								<label for="productId" class="control-label"><span class="text-danger">*</span>Produk</label>
 								<div class="form-group">
-									<input type="text" name="nama" value="<?php echo $this->input->post('nama') ? $this->input->post('nama')  : view('product', ['id' => $kartu_stok_non_aset['productId']], 'nama') ?>" class="form-control" id="nama" />
-									<span class="text-danger"><?php echo form_error('nama'); ?></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label for="kodeBarang" class="control-label"><span class="text-danger">*</span>Barang</label>
-								<div class="form-group">
-									<select name="kodeBarang" class="form-control select2">
+									<select name="productId" class="form-control select2">
 										<?php
-										foreach ($barang as $value) {
-											$selected = ($value['id'] == view('product', ['id' => $kartu_stok_non_aset['productId']], 'kodeBarang')) ? ' selected="selected"' : "";
-											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['namaBarang'] . '</option>';
+										foreach ($produk as $value) {
+											$selected = ($value['id'] == $kartu_stok_aset['productId']) ? ' selected="selected"' : "";
+											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
 										}
 										?>
 									</select>
-									<span class="text-danger"><?php echo form_error('kodeBarang'); ?></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label for="merek" class="control-label"><span class="text-danger">*</span>Merek Produk</label>
-								<div class="form-group">
-									<input type="text" name="merek" value="<?php echo $this->input->post('merek') ? $this->input->post('merek')  : view('product', ['id' => $kartu_stok_non_aset['productId']], 'merek') ?>" class="form-control" id="merek" />
-									<span class="text-danger"><?php echo form_error('merek'); ?></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label for="satuan" class="control-label"><span class="text-danger">*</span>Satuan</label>
-								<div class="form-group">
-									<select name="satuan" class="form-control select2">
-										<?php
-										$stauan = ['pcs', 'kg', 'pack', 'dus', 'unit'];
-										foreach ($stauan as $value) {
-											$selected = ($value == view('product', ['id' => $kartu_stok_non_aset['productId']], 'satuan')) ? ' selected="selected"' : "";
-											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-										}
-										?>
-									</select>
-									<span class="text-danger"><?php echo form_error('satuan'); ?></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label for="deskripsi" class="control-label"><span class="text-danger">*</span>Deskripsi Produk</label>
-								<div class="form-group">
-									<input type="text" name="deskripsi" value="<?php echo $this->input->post('deskripsi') ? $this->input->post('deskripsi')  : view('product', ['id' => $kartu_stok_non_aset['productId']], 'deskripsi') ?>" class="form-control" id="deskripsi" />
-									<span class="text-danger"><?php echo form_error('deskripsi'); ?></span>
+									<span class="text-danger"><?php echo form_error('productId'); ?></span>
 								</div>
 							</div>
 							<div class="col-md-6">

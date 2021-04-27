@@ -29,12 +29,9 @@
                                         $no = 1;
                                         foreach ($produk_ as $t) {
                                             $kendaraan = $this->db->get_where('product_kendaraan', ['productId' => $t['id']])->row_array();
-                                            $ksna = $this->db->get_where('kartu_stok_non_aset', ['productId' => $t['id']])->row_array();
-                                            $ksa = $this->db->get_where('kartu_stok_aset', ['productId' => $t['id']])->row_array();
+                                            
                                             $boolKendaraan = ($kendaraan == null) ? true : false;
-                                            $boolKsna = ($ksna == null) ? true : false;
-                                            $boolKsa = ($ksa == null) ? true : false;
-                                            if ($boolKendaraan == true && $boolKsna == true && $boolKsa == true) {
+                                            if ($boolKendaraan == true) {
                                         ?>
                                               <tr>
                                                   <td><?php echo $no; ?></td>

@@ -43,6 +43,8 @@ class Produk_kendaraan extends CI_Controller
                 'kodeBarang' => $this->input->post('kodeBarang'),
             );
             $produk_id = $this->Produk_kendaraan_model->add_produk($params0);
+            // var_dump($params0);
+            // die;
             $params = array(
                 'tipe' => $this->input->post('tipe'),
                 'bahanBakar' => $this->input->post('bahanBakar'),
@@ -70,7 +72,7 @@ class Produk_kendaraan extends CI_Controller
             }
             redirect('produk_kendaraan/index');
         } else {
-            $data['barang'] = $this->Barang_model->get_all_barang_();
+            $data['barang'] = $this->Barang_model->get_all_barang_aset();
             $data['_view'] = 'administrator/produk_kendaraan/add';
             $this->load->view('administrator/layouts/main', $data);
         }
@@ -132,7 +134,7 @@ class Produk_kendaraan extends CI_Controller
                 }
                 redirect('produk_kendaraan/index');
             } else {
-                $data['barang'] = $this->Barang_model->get_all_barang_();
+                $data['barang'] = $this->Barang_model->get_all_barang_aset();
                 $data['_view'] = 'administrator/produk_kendaraan/edit';
                 $this->load->view('administrator/layouts/main', $data);
             }

@@ -16,8 +16,22 @@ class Produk_model extends CI_Model
     }
     function get_all_produk_asset()
     {
-        $this->db->order_by('createdAt', 'desc');
-        return $this->db->query('select * from product join kartu_stok_non_aset on product.id != kartu_stok_non_aset."productId"')->result_array();
+        return $this->db
+            ->select('product.id as id, product.nama as nama, product.merek as merek, product.satuan as satuan')
+            ->join('barang', 'barang.id=product.kodeBarang')
+            ->join('sub_kelompok', 'sub_kelompok.id=barang.kodeSub')
+            ->join('kelompok', 'kelompok.id=sub_kelompok.kodeKelompok')
+            ->join('golongan', 'golongan.id=kelompok.kodeGol')->get_where('product', ['namaGolongan' => 'Aset'])->result_array();
+    }
+
+    function get_all_produk_non_asset()
+    {
+        return $this->db
+            ->select('product.id as id, product.nama as nama, product.merek as merek, product.satuan as satuan')
+            ->join('barang', 'barang.id=product.kodeBarang')
+            ->join('sub_kelompok', 'sub_kelompok.id=barang.kodeSub')
+            ->join('kelompok', 'kelompok.id=sub_kelompok.kodeKelompok')
+            ->join('golongan', 'golongan.id=kelompok.kodeGol')->get_where('product', ['namaGolongan' => 'Non-Aset'])->result_array();
     }
     function add_produk($params, $text)
     {

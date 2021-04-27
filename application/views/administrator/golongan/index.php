@@ -7,7 +7,7 @@
               <div class="col-12 col-md-12 col-lg-12">
                   <div class="card">
                       <div class="card-header">
-                          <a href="<?= base_url('golongan/add') ?>" class="badge badge-success">Tambah Golongan</a>
+                          <!-- <a href="<?= base_url('golongan/add') ?>" class="badge badge-success">Tambah Golongan</a> -->
                       </div>
                       <div class="card-body">
                           <div class="table-responsive">
@@ -16,7 +16,7 @@
                                       <tr>
                                           <th>No</th>
                                           <th>Golongan</th>
-                                          <th>Actions</th>
+                                          <!-- <th>Actions</th> -->
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -26,10 +26,10 @@
                                           <tr>
                                               <td><?php echo $no; ?></td>
                                               <td><?php echo $t['namaGolongan']; ?></td>
-                                              <td>
+                                              <!-- <td>
                                                   <a href="<?php echo base_url('golongan/edit/' . $t['id']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>
                                                   <a href="<?php echo base_url('golongan/remove/' . $t['id']); ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete"><span class="fa fa-trash"></span></a>
-                                              </td>
+                                              </td> -->
                                           </tr>
                                       <?php
                                             $no++;

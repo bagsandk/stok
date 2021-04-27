@@ -22,11 +22,8 @@ class Kartu_stok_non_aset extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->load->library('ciqrcode');
-        $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
-        $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');
-        $this->form_validation->set_rules('satuan', 'Satuan', 'required|max_length[100]');
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|max_length[100]');
-        $this->form_validation->set_rules('kodeBarang', 'Kode Barang', 'required|max_length[100]');
+        $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
+
         $this->form_validation->set_rules('lokasiGudang', 'Lokasi Gedung', 'required|max_length[100]');
         $this->form_validation->set_rules('lokasiRak', 'Lokasi Rak', 'required|max_length[100]');
         $this->form_validation->set_rules('jumlahStok', 'Jumlah Stok', 'required|max_length[100]');
@@ -34,40 +31,29 @@ class Kartu_stok_non_aset extends CI_Controller
         $this->form_validation->set_rules('saldoMin', 'Minimal Saldo', 'required|max_length[100]');
 
         if ($this->form_validation->run()) {
-            $params0 = array(
-                'nama' => $this->input->post('nama'),
-                'merek' => $this->input->post('merek'),
-                'satuan' => $this->input->post('satuan'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'gambar' => '-',
-                'createdAt' => date('Y-m-d H:i:s'),
-                'updatedAt' => date('Y-m-d H:i:s'),
-                'kodeBarang' => $this->input->post('kodeBarang'),
-            );
-            $produk_id = $this->Kartu_stok_non_aset_model->add_produk($params0);
             $params = array(
                 'lokasiGudang' => $this->input->post('lokasiGudang'),
                 'lokasiRak' => $this->input->post('lokasiRak'),
-                'satuan' => $this->input->post('satuan'),
+                'satuan' => view('product', ['id' => $this->input->post('productId')], 'satuan'),
                 'jumlahStok' => $this->input->post('jumlahStok'),
                 'hargaRerata' => $this->input->post('hargaRerata'),
                 'saldoMin' => $this->input->post('saldoMin'),
                 'createdAt' => date('Y-m-d H:i:s'),
                 'updatedAt' => date('Y-m-d H:i:s'),
-                'productId' => $produk_id,
+                'productId' => $this->input->post('productId'),
             );
             $relation = [
                 [
-                    'table' => 'barang',
-                    'field' => ['namaBarang'],
+                    'table' => 'product',
+                    'field' => ['nama'],
                     'pk' => 'id',
-                    'valuePk' => $this->input->post('kodeBarang'),
+                    'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
                 ]
             ];
-            $text = text('Insert', 'kartu_stok_non_aset', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $_POST, []);
+            $text = text('Insert', 'kartu_stok_non_aset', ['lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $_POST, []);
             // var_dump($_POST);
             // die;
-            
+
             $in = $this->Kartu_stok_non_aset_model->add_kartu_stok_non_aset($params, $text);
             if ($in) {
                 alert('success', 'Berhasil...', 'Berhasil menambahkan data');
@@ -76,7 +62,7 @@ class Kartu_stok_non_aset extends CI_Controller
             }
             redirect('kartu_stok_non_aset/index');
         } else {
-            $data['barang'] = $this->Barang_model->get_all_barang_();
+            $data['produk'] = $this->Produk_model->get_all_produk_non_asset();
             $data['_view'] = 'guest/kartu_stok_non_aset/add';
             $this->load->view('guest/layouts/main', $data);
         }
@@ -87,48 +73,35 @@ class Kartu_stok_non_aset extends CI_Controller
         if (isset($data['kartu_stok_non_aset']['id'])) {
             $da = $this->db->join('product', 'product.id=kartu_stok_non_aset.productId')->get_where('kartu_stok_non_aset', ['kartu_stok_non_aset.id' => $id])->row_array();
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('nama', 'Nama produk', 'required|max_length[100]');
-            $this->form_validation->set_rules('merek', 'Merek', 'required|max_length[100]');
-            $this->form_validation->set_rules('satuan', 'Satuan', 'required|max_length[100]');
-            $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|max_length[100]');
-            $this->form_validation->set_rules('kodeBarang', 'Kode Barang', 'required|max_length[100]');
+            $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
+
             $this->form_validation->set_rules('lokasiGudang', 'Lokasi Gedung', 'required|max_length[100]');
             $this->form_validation->set_rules('lokasiRak', 'Lokasi Rak', 'required|max_length[100]');
             $this->form_validation->set_rules('jumlahStok', 'Jumlah Stok', 'required|max_length[100]');
             $this->form_validation->set_rules('hargaRerata', 'Harga Rerata', 'required|max_length[100]');
             $this->form_validation->set_rules('saldoMin', 'Minimal Saldo', 'required|max_length[100]');
             if ($this->form_validation->run()) {
-                $params0 = array(
-                    'nama' => $this->input->post('nama'),
-                    'merek' => $this->input->post('merek'),
-                    'satuan' => $this->input->post('satuan'),
-                    'deskripsi' => $this->input->post('deskripsi'),
-                    'gambar' => '-',
-                    'createdAt' => date('Y-m-d H:i:s'),
-                    'updatedAt' => date('Y-m-d H:i:s'),
-                    'kodeBarang' => $this->input->post('kodeBarang'),
-                );
-                $this->Kartu_stok_non_aset_model->update_produk($data['kartu_stok_non_aset']['productId'], $params0);
+
                 $params = array(
                     'lokasiGudang' => $this->input->post('lokasiGudang'),
                     'lokasiRak' => $this->input->post('lokasiRak'),
-                    'satuan' => $this->input->post('satuan'),
+                    'satuan' => view('product', ['id' => $this->input->post('productId')], 'satuan'),
                     'jumlahStok' => $this->input->post('jumlahStok'),
                     'hargaRerata' => $this->input->post('hargaRerata'),
                     'saldoMin' => $this->input->post('saldoMin'),
                     'createdAt' => date('Y-m-d H:i:s'),
                     'updatedAt' => date('Y-m-d H:i:s'),
-                    'productId' => $data['kartu_stok_non_aset']['productId'],
+                    'productId' => $this->input->post('productId'),
                 );
                 $relation = [
                     [
-                        'table' => 'barang',
-                        'field' => ['namaBarang'],
+                        'table' => 'product',
+                        'field' => ['nama'],
                         'pk' => 'id',
-                        'valuePk' => $this->input->post('kodeBarang'),
+                        'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
                     ]
                 ];
-                $text = text('Update', 'kartu_stok_non_aset', ['nama', 'gambar', 'merek', 'satuan', 'deskripsi', 'lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $da, $_POST);
+                $text = text('Update', 'kartu_stok_non_aset', ['lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $da, $_POST);
                 if ($text != '') {
                     $barang_id = $this->Kartu_stok_non_aset_model->update_kartu_stok_non_aset($id, $params, $text);
                     if ($barang_id) {
@@ -141,7 +114,8 @@ class Kartu_stok_non_aset extends CI_Controller
                 }
                 redirect('kartu_stok_non_aset/index');
             } else {
-                $data['barang'] = $this->Barang_model->get_all_barang_();
+                $data['produk'] = $this->Produk_model->get_all_produk_non_asset();
+
                 $data['_view'] = 'guest/kartu_stok_non_aset/edit';
                 $this->load->view('guest/layouts/main', $data);
             }

@@ -37,7 +37,7 @@ class Produk_kendaraan_model extends CI_Model
 
     function add_produk($params)
     {
-        $r = $this->db->insert('product', $params);
+        $this->db->insert('product', $params);
         return $this->db->order_by('createdAt', 'desc')->get('product', 1)->row_array()['id'];
     }
 

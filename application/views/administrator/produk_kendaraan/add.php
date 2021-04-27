@@ -90,7 +90,7 @@
 							<div class="col-md-6">
 								<label for="hp" class="control-label"><span class="text-danger">*</span>HP</label>
 								<div class="form-group">
-									<input type="text" name="hp" value="<?php echo $this->input->post('hp'); ?>" class="form-control" id="hp" />
+									<input type="number" maxlength="4" minlength="4" name="hp" value="<?php echo $this->input->post('hp'); ?>" class="form-control" id="hp" />
 									<span class="text-danger"><?php echo form_error('hp'); ?></span>
 								</div>
 							</div>

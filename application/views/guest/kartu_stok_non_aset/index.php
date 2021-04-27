@@ -24,7 +24,6 @@
                                           <th>Jumlah Stok</th>
                                           <th>Harga Rerata</th>
                                           <th>Minimal Saldo</th>
-                                          <th>Minimal Saldo</th>
                                           <th>Actions</th>
                                       </tr>
                                   </thead>
