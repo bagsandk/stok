@@ -14,6 +14,11 @@ class Produk_model extends CI_Model
         $this->db->order_by('createdAt', 'desc');
         return $this->db->get('product')->result_array();
     }
+    function get_all_produk_asset()
+    {
+        $this->db->order_by('createdAt', 'desc');
+        return $this->db->query('select * from product join kartu_stok_non_aset on product.id != kartu_stok_non_aset."productId"')->result_array();
+    }
     function add_produk($params, $text)
     {
         $r = $this->db->insert('product', $params);

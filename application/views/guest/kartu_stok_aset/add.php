@@ -93,7 +93,16 @@
 							<div class="col-md-6">
 								<label for="statusPerolehan" class="control-label"><span class="text-danger">*</span>Status Perolehan</label>
 								<div class="form-group">
-									<input type="text" name="statusPerolehan" value="<?php echo $this->input->post('statusPerolehan'); ?>" class="form-control" id="statusPerolehan" />
+									<select name="statusPerolehan" class="form-control select2 select2">
+										<option value="">Pilih Status Perolehan</option>
+										<?php
+										$statusPerolehan = ['Beli','Hibah'];
+										foreach ($statusPerolehan as $value) {
+											$selected = ($value == $this->input->post('statusPerolehan')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
+										}
+										?>
+									</select>
 									<span class="text-danger"><?php echo form_error('statusPerolehan'); ?></span>
 								</div>
 							</div>
@@ -107,7 +116,16 @@
 							<div class="col-md-6">
 								<label for="kondisi" class="control-label"><span class="text-danger">*</span>Kondisi</label>
 								<div class="form-group">
-									<input type="text" name="kondisi" value="<?php echo $this->input->post('kondisi'); ?>" class="form-control" id="kondisi" />
+									<select name="kondisi" class="form-control select2 select2">
+										<option value="">Pilih kondisi</option>
+										<?php
+										$kondisi = ['Baik','Rusak'];
+										foreach ($kondisi as $value) {
+											$selected = ($value == $this->input->post('kondisi')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
+										}
+										?>
+									</select>
 									<span class="text-danger"><?php echo form_error('kondisi'); ?></span>
 								</div>
 							</div>
@@ -137,9 +155,9 @@
 										</div>
 									</div>
 									<div class="col-md-4">
-										<label for="masaGaransi" class="control-label"><span class="text-danger">*</span>Masa Garansi</label>
+										<label for="masaGaransi" class="control-label"><span class="text-danger">*</span>Masa Garansi per Bulan</label>
 										<div class="form-group">
-											<input type="text" name="masaGaransi" value="<?php echo $this->input->post('masaGaransi'); ?>" class="form-control" id="masaGaransi" />
+											<input type="number" name="masaGaransi" value="<?php echo $this->input->post('masaGaransi'); ?>" class="form-control" id="masaGaransi" />
 											<span class="text-danger"><?php echo form_error('masaGaransi'); ?></span>
 										</div>
 									</div>

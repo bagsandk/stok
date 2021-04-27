@@ -4,7 +4,7 @@ class Kartu_stok_aset extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        if($this->session->userdata('isLogIn') != true){
+        if ($this->session->userdata('isLogIn') != true) {
             redirect('auth/logout');
         }
         $this->load->model('Kartu_stok_aset_model');
@@ -23,11 +23,11 @@ class Kartu_stok_aset extends CI_Controller
         $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
         $this->form_validation->set_rules('departement', 'Departement', 'required|max_length[100]');
         $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
-        $this->form_validation->set_rules('hargaPerolehan', 'Harga perlolehan', 'required|max_length[100]');
+        $this->form_validation->set_rules('hargaPerolehan', 'Harga perlolehan', 'max_length[100]');
         $this->form_validation->set_rules('masaManfaat', 'Masa manfaat', 'required|max_length[100]');
         $this->form_validation->set_rules('supplier', 'Supplier', 'required|max_length[100]');
         $this->form_validation->set_rules('pengguna', 'Pengunaa', 'required|max_length[100]');
-        $this->form_validation->set_rules('noPo', 'No PO', 'required|max_length[100]');
+        $this->form_validation->set_rules('noPo', 'No PO', 'max_length[100]');
         $this->form_validation->set_rules('statusPerolehan', 'Status perolehan', 'required|max_length[100]');
         $this->form_validation->set_rules('lokasi', 'Lokasi', 'required|max_length[100]');
         $this->form_validation->set_rules('kondisi', 'Kondisi', 'required|max_length[100]');
@@ -81,10 +81,10 @@ class Kartu_stok_aset extends CI_Controller
             $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
             $this->ciqrcode->initialize($config);
 
-            $image_name = $newInv . '.png'; 
+            $image_name = $newInv . '.png';
 
-            $params['data'] = $newInv; 
-            $params['level'] = 'H'; 
+            $params['data'] = $newInv;
+            $params['level'] = 'H';
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name;
             $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
@@ -129,7 +129,7 @@ class Kartu_stok_aset extends CI_Controller
             }
             redirect('kartu_stok_aset/index');
         } else {
-            $data['produk'] = $this->Produk_model->get_all_produk_();
+            $data['produk'] = $this->Produk_model->get_all_produk_asset();
             $data['_view'] = 'guest/kartu_stok_aset/add';
             $this->load->view('guest/layouts/main', $data);
         }
@@ -142,7 +142,7 @@ class Kartu_stok_aset extends CI_Controller
         $data['ksa_kendaraan'] = $this->Kartu_stok_aset_model->get_ksa_kendaraan($id);
         if (isset($data['kartu_stok_aset']['noInventaris'])) {
             $this->load->library('form_validation');
-            $da = array_merge($data['kartu_stok_aset'], $data['kartu_garansi'], $data['ksa_kendaraan']);
+            $da = array_merge((isset($data['kartu_stok_aset'])) ? $data['kartu_stok_aset'] : [], (isset($data['kartu_garansi'])) ? $data['kartu_garansi'] : [], (isset($data['ksa_kendaraan'])) ? $data['ksa_kendaraan'] : []);
             $this->form_validation->set_rules('productId', 'Produk', 'required|max_length[100]');
             $this->form_validation->set_rules('noInventaris', 'No Inventaris', 'required|max_length[100]');
             $this->form_validation->set_rules('ruang', 'Ruang', 'required|max_length[100]');
