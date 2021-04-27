@@ -47,7 +47,7 @@ class Kartu_stok_non_aset extends CI_Controller
                     'table' => 'product',
                     'field' => ['nama'],
                     'pk' => 'id',
-                    'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
+                    'valuePk' => $this->input->post('productId'),
                 ]
             ];
             $text = text('Insert', 'kartu_stok_non_aset', ['lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $_POST, []);
@@ -98,7 +98,7 @@ class Kartu_stok_non_aset extends CI_Controller
                         'table' => 'product',
                         'field' => ['nama'],
                         'pk' => 'id',
-                        'valuePk' => view('product', ['id' => $this->input->post('productId')], 'kodeBarang'),
+                        'valuePk' => $this->input->post('productId'),
                     ]
                 ];
                 $text = text('Update', 'kartu_stok_non_aset', ['lokasiGudang', 'lokasiRak', 'satuan', 'jumlahStok', 'hargaRerata', 'saldoMin'], $relation, $da, $_POST);
