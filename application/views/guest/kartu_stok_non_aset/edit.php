@@ -41,21 +41,21 @@
 							<div class="col-md-6">
 								<label for="jumlahStok" class="control-label"><span class="text-danger">*</span>Jumlah Stok</label>
 								<div class="form-group">
-									<input type="text" name="jumlahStok" value="<?php echo $this->input->post('jumlahStok') ? $this->input->post('jumlahStok')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'jumlahStok') ?>" class="form-control" id="jumlahStok" />
+									<input type="number" name="jumlahStok" value="<?php echo $this->input->post('jumlahStok') ? $this->input->post('jumlahStok')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'jumlahStok') ?>" class="form-control" id="jumlahStok" />
 									<span class="text-danger"><?php echo form_error('jumlahStok'); ?></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<label for="hargaRerata" class="control-label"><span class="text-danger">*</span>Harga Rerata</label>
 								<div class="form-group">
-									<input type="text" name="hargaRerata" value="<?php echo $this->input->post('hargaRerata') ? $this->input->post('hargaRerata')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'hargaRerata') ?>" class="form-control" id="hargaRerata" />
+									<input type="text" name="hargaRerata" value="<?php echo $this->input->post('hargaRerata') ? $this->input->post('hargaRerata')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'hargaRerata') ?>" class="form-control currency" id="hargaRerata" />
 									<span class="text-danger"><?php echo form_error('hargaRerata'); ?></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<label for="saldoMin" class="control-label"><span class="text-danger">*</span>Minimal Saldo</label>
 								<div class="form-group">
-									<input type="text" name="saldoMin" value="<?php echo $this->input->post('saldoMin') ? $this->input->post('saldoMin')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'saldoMin') ?>" class="form-control" id="saldoMin" />
+									<input type="number" name="saldoMin" value="<?php echo $this->input->post('saldoMin') ? $this->input->post('saldoMin')  : view('kartu_stok_non_aset', ['id' => $kartu_stok_non_aset['id']], 'saldoMin') ?>" class="form-control" id="saldoMin" />
 									<span class="text-danger"><?php echo form_error('saldoMin'); ?></span>
 								</div>
 							</div>

@@ -59,8 +59,8 @@
             </nav>
             <div class="main-sidebar">
                 <aside id="sidebar-wrapper">
-                <div class="sidebar-brand">
-                        <img class="p-2" src="<?=base_url('assets/dds.png')?>" width="180" alt="">
+                    <div class="sidebar-brand">
+                        <img class="p-2" src="<?= base_url('assets/dds.png') ?>" width="180" alt="">
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
                         <a href="index.html">DDS</a>
@@ -166,6 +166,21 @@
                 return false;
             }
         }
+
+        $('#gedung').change(function() {
+            let a = $(this).val()
+            console.log(a);
+            $.ajax({
+                type: "POST",
+                data: {
+                    gedung: a
+                },
+                url: "<?= base_url('kartu_stok_aset/getruang') ?>",
+                success: function(data) {
+                   $('#ruang').html(data);
+                }
+            });
+        })
     </script>
     <!-- Template JS File -->
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>

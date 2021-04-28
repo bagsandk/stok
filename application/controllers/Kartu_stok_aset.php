@@ -9,7 +9,10 @@ class Kartu_stok_aset extends CI_Controller
         }
         $this->load->model('Kartu_stok_aset_model');
         $this->load->model('Produk_model');
+        $this->load->model('Department_model'); 
+        $this->load->model('Gedung_model'); 
         $this->load->model('Global_model');
+        $this->load->model('Ruangan_model');
     }
     function index()
     {
@@ -129,7 +132,9 @@ class Kartu_stok_aset extends CI_Controller
             }
             redirect('kartu_stok_aset/index');
         } else {
+            $data['gedung'] = $this->Gedung_model->get_all_gedung();
             $data['produk'] = $this->Produk_model->get_all_produk_asset();
+            $data['department'] = $this->Department_model->get_all_department();
             $data['_view'] = 'guest/kartu_stok_aset/add';
             $this->load->view('guest/layouts/main', $data);
         }
@@ -294,6 +299,9 @@ class Kartu_stok_aset extends CI_Controller
                 }
                 redirect('kartu_stok_aset/index');
             } else {
+            $data['department'] = $this->Department_model->get_all_department();
+
+                $data['gedung'] = $this->Gedung_model->get_all_gedung();
                 $data['produk'] = $this->Produk_model->get_all_produk_();
                 $data['_view'] = 'guest/kartu_stok_aset/edit';
                 $this->load->view('guest/layouts/main', $data);
@@ -351,5 +359,15 @@ class Kartu_stok_aset extends CI_Controller
             alert('error', 'Gagal...', 'Data yang ingin dihapus tidak ditemukan');
             redirect('kartu_stok_aset/edit/' . $noInv);
         }
+    }
+    function getruang()
+    {
+        $ruangan = $this->db->get_where('ruangan',['gedungId' => $_POST['gedung']])->result_array();
+        $html = '';
+        foreach ($ruangan as $r) {
+            $selected = ($r['id'] == $this->input->post('ruang')) ? ' selected="selected"' : "";
+            $html .= '<option value="' . $r['id'] . '" ' . $selected . '>' . $r['nama'] . '</option>';
+        }
+        echo $html;
     }
 }

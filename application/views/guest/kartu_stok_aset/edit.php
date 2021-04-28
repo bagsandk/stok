@@ -45,10 +45,27 @@
 								</div>
 							</div>
 
-							<div class="col-md-6">
+							<div class="col-md-3">
+								<label for="gedung" class="control-label"><span class="text-danger">*</span>Gedung</label>
+								<div class="form-group">
+									<select id="gedung" name="gedung" class="form-control select2 select2">
+										<option value="">Pilih Gedung</option>
+										<?php
+										foreach ($gedung as $value) {
+											$selected = ($value['id'] == $this->input->post('gedung')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['namaGedung'] . '</option>';
+										}
+										?>
+									</select>
+									<span class="text-danger"><?php echo form_error('gedung'); ?></span>
+								</div>
+							</div>
+							<div class="col-md-3">
 								<label for="ruang" class="control-label"><span class="text-danger">*</span>Ruang</label>
 								<div class="form-group">
-									<input type="text" name="ruang" value="<?php echo $this->input->post('ruang') ? $this->input->post('ruang') : $kartu_stok_aset['ruang']; ?>" class="form-control" id="ruang" />
+									<select id="ruang" name="ruang" class="form-control select2 select2">
+										<option value="">Pilih Ruang</option>
+									</select>
 									<span class="text-danger"><?php echo form_error('ruang'); ?></span>
 								</div>
 							</div>

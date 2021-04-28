@@ -49,7 +49,7 @@
                                               <td><?= $t['lokasiRak']; ?></td>
                                               <td><?= $t['satuan']; ?></td>
                                               <td><?= $t['jumlahStok']; ?></td>
-                                              <td><?= $t['hargaRerata']; ?></td>
+                                              <td><?= 'Rp ' . number_format($t['hargaRerata']); ?></td>
                                               <td><?= $t['saldoMin']; ?></td>
                                               <td>
                                                   <a href="<?php echo base_url('kartu_stok_non_aset/edit/' . $t['id']); ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fa fa-pen"></span></a>

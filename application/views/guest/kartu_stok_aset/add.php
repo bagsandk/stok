@@ -30,10 +30,10 @@
 									<select name="departement" class="form-control select2 select2">
 										<option value="">Pilih Departement</option>
 										<?php
-										$departement = ['BAAK','SDM'];
-										foreach ($departement as $value) {
-											$selected = ($value == $this->input->post('departement')) ? ' selected="selected"' : "";
-											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
+										var_dump($department);
+										foreach ($department as $value) {
+											$selected = ($value['nameShort'] == $this->input->post('departement')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value['nameShort'] . '" ' . $selected . '>' . $value['nameShort'] . '</option>';
 										}
 										?>
 									</select>
@@ -62,10 +62,27 @@
 								</div>
 							</div>
 
-							<div class="col-md-6">
+							<div class="col-md-3">
+								<label for="gedung" class="control-label"><span class="text-danger">*</span>Gedung</label>
+								<div class="form-group">
+									<select id="gedung" name="gedung" class="form-control select2 select2">
+										<option value="">Pilih Gedung</option>
+										<?php
+										foreach ($gedung as $value) {
+											$selected = ($value['id'] == $this->input->post('gedung')) ? ' selected="selected"' : "";
+											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['namaGedung'] . '</option>';
+										}
+										?>
+									</select>
+									<span class="text-danger"><?php echo form_error('gedung'); ?></span>
+								</div>
+							</div>
+							<div class="col-md-3">
 								<label for="ruang" class="control-label"><span class="text-danger">*</span>Ruang</label>
 								<div class="form-group">
-									<input type="text" name="ruang" value="<?php echo $this->input->post('ruang'); ?>" class="form-control" id="ruang" />
+									<select id="ruang" name="ruang" class="form-control select2 select2">
+										<option value="">Pilih Ruang</option>
+									</select>
 									<span class="text-danger"><?php echo form_error('ruang'); ?></span>
 								</div>
 							</div>
@@ -96,7 +113,7 @@
 									<select name="statusPerolehan" class="form-control select2 select2">
 										<option value="">Pilih Status Perolehan</option>
 										<?php
-										$statusPerolehan = ['Beli','Hibah'];
+										$statusPerolehan = ['Beli', 'Hibah'];
 										foreach ($statusPerolehan as $value) {
 											$selected = ($value == $this->input->post('statusPerolehan')) ? ' selected="selected"' : "";
 											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
@@ -119,7 +136,7 @@
 									<select name="kondisi" class="form-control select2 select2">
 										<option value="">Pilih kondisi</option>
 										<?php
-										$kondisi = ['Baik','Rusak'];
+										$kondisi = ['Baik', 'Rusak'];
 										foreach ($kondisi as $value) {
 											$selected = ($value == $this->input->post('kondisi')) ? ' selected="selected"' : "";
 											echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';

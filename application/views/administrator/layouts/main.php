@@ -60,7 +60,7 @@
             <div class="main-sidebar">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <img class="p-2" src="<?=base_url('assets/dds.png')?>" width="180" alt="">
+                        <img class="p-2" src="<?= base_url('assets/dds.png') ?>" width="180" alt="">
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
                         <a href="index.html">DDS</a>
@@ -73,9 +73,24 @@
                             </a>
                         </li>
                         <li class="menu-header">Master</li>
-                        <li class="dropdown <?= ($this->uri->segment(1) == 'golongan' || $this->uri->segment(1) == 'kelompok' || $this->uri->segment(1) == 'subkelompok' || $this->uri->segment(1) == 'barang' || $this->uri->segment(1) == 'produk' || $this->uri->segment(1) == 'produk_kendaraan')  ? 'active' : '' ?>">
+                        <li class="dropdown <?= ($this->uri->segment(1) == 'golongan' || $this->uri->segment(1) == 'kelompok' || $this->uri->segment(1) == 'subkelompok' || $this->uri->segment(1) == 'barang' || $this->uri->segment(1) == 'department' || $this->uri->segment(1) == 'gedung' || $this->uri->segment(1) == 'ruangan')  ? 'active' : '' ?>">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-database"></i><span>Data Master</span></a>
                             <ul class="dropdown-menu">
+                                <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'department') ? 'active' : ''; ?>">
+                                    <a class="nav-link" href="<?php echo base_url('department/index'); ?>">
+                                        <span>Department</span>
+                                    </a>
+                                </li>
+                                <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'gedung') ? 'active' : ''; ?>">
+                                    <a class="nav-link" href="<?php echo base_url('gedung/index'); ?>">
+                                        <span>Gedung</span>
+                                    </a>
+                                </li>
+                                <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'ruangan') ? 'active' : ''; ?>">
+                                    <a class="nav-link" href="<?php echo base_url('ruangan/index'); ?>">
+                                        <span>Ruangan</span>
+                                    </a>
+                                </li>
                                 <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'golongan') ? 'active' : ''; ?>">
                                     <a class="nav-link" href="<?php echo base_url('golongan/index'); ?>">
                                         <span>Golongan</span>
@@ -96,6 +111,12 @@
                                         <span>Barang</span>
                                     </a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="menu-header">Produk</li>
+                        <li class="dropdown <?= ($this->uri->segment(1) == 'produk' || $this->uri->segment(1) == 'produk_kendaraan')  ? 'active' : '' ?>">
+                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-box"></i><span>Data Produk</span></a>
+                            <ul class="dropdown-menu">
                                 <li class="<?php echo (empty($this->uri->segment(1)) || $this->uri->segment(1) == 'produk') ? 'active' : ''; ?>">
                                     <a class="nav-link" href="<?php echo base_url('produk/index'); ?>">
                                         <span>Produk</span>
@@ -108,6 +129,7 @@
                                 </li>
                             </ul>
                         </li>
+
 
                     </ul>
                 </aside>
