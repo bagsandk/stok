@@ -40,7 +40,7 @@
                                           <tr>
                                               <td><?php echo $no; ?></td>
                                               <td>
-                                                  <button type="button" class="btn btn-primary btn-sm m-1" data-html="true" data-toggle="popover" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
+                                                  <button type="button" class="btn btn-primary btn-sm m-1" tabindex="0" data-toggle="popover" data-trigger="focus" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
                                                   <a href="javascript:void(0)" data-id="<?= $t['noInventaris'] ?>" class="btn btn-sm btn-warning m-1 cetak">Cetak</a>
                                               </td>
                                               <td>
@@ -53,7 +53,7 @@
                                                       </label>
                                                       <?= form_close(); ?>
                                                   <?php } else { ?>
-                                                      <img width="80"  alt="image" src="<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid" data-html="true" data-toggle="popover" data-content="<img class='img-responsive' src='<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>' width='240'>">
+                                                      <img width="80"  alt="image" src="<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid"  tabindex="0" data-toggle="popover" data-trigger="focus" data-content="<img class='img-responsive' src='<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>' width='240'>">
                                                       <?= form_open_multipart('kartu_stok_aset/uploadgambar/' . $t['productId']); ?>
                                                       <label class="selectgroup-item">
                                                           <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">

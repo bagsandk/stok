@@ -53,7 +53,7 @@
                                                       </label>
                                                       <?= form_close(); ?>
                                                   <?php } else { ?>
-                                                      <img width="80" alt="image" src="<?= base_url('assets/img/nonaset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid" data-html="true" data-toggle="popover" data-content="<img class='img-responsive' src='<?= base_url('assets/img/nonaset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>' width='240'>">
+                                                      <img width="80" alt="image" src="<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid" data-html="true" tabindex="0" data-toggle="popover" data-trigger="focus" data-content='<img class="img-responsive" src="<?= base_url("assets/img/nonaset/" . view("product", ["id" => $t["productId"]], "gambar")) ?>" width="240">'>
                                                       <?= form_open_multipart('kartu_stok_non_aset/uploadgambar/' . $t['productId']); ?>
                                                       <label class="selectgroup-item">
                                                           <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">
