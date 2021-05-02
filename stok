@@ -1,0 +1,907 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.2
+-- Dumped by pg_dump version 12.2
+
+-- Started on 2021-05-02 10:38:40
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2 (class 3079 OID 16929)
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- TOC entry 3016 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- TOC entry 653 (class 1247 OID 16879)
+-- Name: history_type; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.history_type AS ENUM (
+    'Select',
+    'Insert',
+    'Update',
+    'Delete'
+);
+
+
+ALTER TYPE public.history_type OWNER TO postgres;
+
+--
+-- TOC entry 562 (class 1247 OID 16848)
+-- Name: typeenum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.typeenum AS ENUM (
+    'Yes',
+    'No'
+);
+
+
+ALTER TYPE public.typeenum OWNER TO postgres;
+
+--
+-- TOC entry 565 (class 1247 OID 16854)
+-- Name: typelevel; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.typelevel AS ENUM (
+    'Super_Admin',
+    'Administrator',
+    'Guest'
+);
+
+
+ALTER TYPE public.typelevel OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 213 (class 1259 OID 17022)
+-- Name: barang; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.barang (
+    id character varying DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaBarang" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "kodeSub" character varying
+);
+
+
+ALTER TABLE public.barang OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 17223)
+-- Name: department; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.department (
+    "nameShort" character varying NOT NULL,
+    "nameLong" character varying NOT NULL,
+    level character varying DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.department OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 17205)
+-- Name: gedung; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.gedung (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaGedung" character varying NOT NULL,
+    "thnPembangunan" character varying NOT NULL,
+    "luasGedung" character varying NOT NULL,
+    "alamatGedung" character varying NOT NULL,
+    "jmlLantai" character varying NOT NULL,
+    "jmlRuangan" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.gedung OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 16992)
+-- Name: golongan; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.golongan (
+    id character varying DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaGolongan" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.golongan OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 16897)
+-- Name: history; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.history (
+    history_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    user_id uuid NOT NULL,
+    type public.history_type NOT NULL,
+    query text,
+    log_date timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.history OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 16940)
+-- Name: kartu_garansi; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.kartu_garansi (
+    "noKartuGaransi" character varying NOT NULL,
+    "noInventaris" character varying NOT NULL,
+    "jenisGaransi" character varying NOT NULL,
+    "masaGaransi" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.kartu_garansi OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 16950)
+-- Name: kartu_stok_aset; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.kartu_stok_aset (
+    "noInventaris" character varying NOT NULL,
+    "hargaPerolehan" integer NOT NULL,
+    "masaManfaat" character varying NOT NULL,
+    supplier character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    pengguna character varying,
+    "isShow" boolean,
+    "noPo" character varying,
+    "statusPerolehan" character varying,
+    lokasi character varying,
+    kondisi character varying,
+    "isWaranty" boolean,
+    "productId" character varying,
+    "kodeRuang" uuid
+);
+
+
+ALTER TABLE public.kartu_stok_aset OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 16960)
+-- Name: kartu_stok_non_aset; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.kartu_stok_non_aset (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    "lokasiGudang" character varying NOT NULL,
+    "lokasiRak" character varying NOT NULL,
+    satuan character varying NOT NULL,
+    "jumlahStok" integer NOT NULL,
+    "hargaRerata" integer NOT NULL,
+    "saldoMin" integer NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "productId" character varying
+);
+
+
+ALTER TABLE public.kartu_stok_non_aset OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 17002)
+-- Name: kelompok; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.kelompok (
+    id character varying DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaKelompok" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "kodeGol" character varying
+);
+
+
+ALTER TABLE public.kelompok OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 16971)
+-- Name: ksa_kendaraan; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ksa_kendaraan (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaStnk" character varying,
+    "alamatStnk" character varying,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    ksa character varying,
+    peruntukan character varying
+);
+
+
+ALTER TABLE public.ksa_kendaraan OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 16982)
+-- Name: ksa_nomor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ksa_nomor (
+    kode character varying NOT NULL,
+    nama character varying NOT NULL,
+    nomor character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    ksa character varying
+);
+
+
+ALTER TABLE public.ksa_nomor OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 17032)
+-- Name: product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product (
+    id character varying DEFAULT public.uuid_generate_v4() NOT NULL,
+    nama character varying NOT NULL,
+    gambar character varying NOT NULL,
+    merek character varying NOT NULL,
+    satuan character varying,
+    deskripsi character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "kodeBarang" character varying
+);
+
+
+ALTER TABLE public.product OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 17042)
+-- Name: product_kendaraan; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_kendaraan (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    tipe character varying NOT NULL,
+    "bahanBakar" character varying NOT NULL,
+    "thPembuatan" character varying NOT NULL,
+    warna character varying NOT NULL,
+    hp character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "productId" character varying
+);
+
+
+ALTER TABLE public.product_kendaraan OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 17214)
+-- Name: ruangan; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ruangan (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    nama character varying NOT NULL,
+    "jenisRuangan" character varying NOT NULL,
+    "posisiRuangan" character varying NOT NULL,
+    "ukuranRuangan" character varying NOT NULL,
+    "kapasitasRuangan" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "gedungId" uuid
+);
+
+
+ALTER TABLE public.ruangan OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 17012)
+-- Name: sub_kelompok; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sub_kelompok (
+    id character varying DEFAULT public.uuid_generate_v4() NOT NULL,
+    "namaSub" character varying NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
+    "kodeKelompok" character varying
+);
+
+
+ALTER TABLE public.sub_kelompok OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 16887)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    email character varying(50) NOT NULL,
+    password character varying(75) NOT NULL,
+    "isActive" public.typeenum NOT NULL,
+    profile character varying(75) DEFAULT 'default.png'::character varying NOT NULL,
+    level public.typelevel NOT NULL,
+    publish public.typeenum DEFAULT 'Yes'::public.typeenum NOT NULL,
+    create_at timestamp with time zone DEFAULT now() NOT NULL,
+    update_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 3005 (class 0 OID 17022)
+-- Dependencies: 213
+-- Data for Name: barang; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.barang (id, "namaBarang", "createdAt", "updatedAt", "kodeSub") FROM stdin;
+a9eaa183-abfa-4d27-91d5-4d8cb53c0397	dddd	2021-04-18 19:11:49+07	2021-04-18 19:13:18+07	875713cc-9856-41f0-98bb-5cb783f48690
+8df68126-4dbf-4220-aaae-a5521f15275c	barang	2021-04-26 11:06:46+07	2021-04-26 11:06:46+07	fed419e1-6d78-4716-9cc2-e07e6bfb7c08
+13a63d49-2757-4db8-8e28-dc9256508f67	barang 1	2021-04-29 22:51:18+07	2021-04-29 22:51:18+07	e8ebd8c7-d4a9-47b6-a4f6-f13f869c9001
+a6e8f7d8-e3f6-493e-a6ce-575a1ac335c6	barang 2	2021-04-29 22:51:30+07	2021-04-29 22:51:30+07	4fdd759e-ae6d-41f6-8e91-d4e6fffb642e
+f671e7c7-140d-48a1-b941-c85472e489fb	non aset	2021-04-30 15:28:35+07	2021-04-30 15:28:35+07	122d151f-376d-488a-848c-77391a59d0d3
+\.
+
+
+--
+-- TOC entry 3010 (class 0 OID 17223)
+-- Dependencies: 218
+-- Data for Name: department; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.department ("nameShort", "nameLong", level) FROM stdin;
+BAAK	BAAK	0
+SDM	Sumber Daya Manusia	0
+\.
+
+
+--
+-- TOC entry 3008 (class 0 OID 17205)
+-- Dependencies: 216
+-- Data for Name: gedung; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.gedung (id, "namaGedung", "thnPembangunan", "luasGedung", "alamatGedung", "jmlLantai", "jmlRuangan", "createdAt", "updatedAt") FROM stdin;
+963db26e-4c01-4120-b0bf-9582258cc5be	Alfian	2011	2000	alamat	3	30	2021-04-29 22:46:50.124463+07	2021-04-29 22:46:50.124463+07
+5b896f43-208e-4821-9e10-b456e94fae41	Pasca	2012	2000	20	2	20	2021-04-29 22:47:26.573014+07	2021-04-29 22:47:26.573014+07
+\.
+
+
+--
+-- TOC entry 3002 (class 0 OID 16992)
+-- Dependencies: 210
+-- Data for Name: golongan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.golongan (id, "namaGolongan", "createdAt", "updatedAt") FROM stdin;
+d307a55a-03f0-4d5b-9b55-ccc42e07f3ea	asdf	2021-04-17 23:40:35.946774+07	2021-04-18 17:24:46+07
+a9ac424a-7201-4338-8aa2-dee64a0102f9	asdff	2021-04-22 02:32:01+07	2021-04-22 02:32:01+07
+d6e258ff-719a-4fb5-95ac-a5290f9a765f	asdasd	2021-04-22 02:35:05+07	2021-04-22 02:35:05+07
+1c2d12d8-9022-42ae-bec4-cf9486ad2bf2	Assets	2021-04-26 11:04:34+07	2021-04-26 11:04:34+07
+b5671df4-a376-45c4-8471-91062f2d551f	Non Aset	2021-04-26 11:05:36+07	2021-04-26 11:05:36+07
+38057aa5-3bd5-41fd-b596-6fb24b7330e5	Aset	2021-04-29 22:49:58+07	2021-04-29 22:49:58+07
+1b854a8d-34b9-4118-9949-a5062f2fb586	Non-Aset	2021-04-29 22:50:16+07	2021-04-29 22:50:16+07
+\.
+
+
+--
+-- TOC entry 2996 (class 0 OID 16897)
+-- Dependencies: 204
+-- Data for Name: history; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.history (history_id, user_id, type, query, log_date) FROM stdin;
+b9a740f7-2edc-40b8-807c-fb2ce905e1c7	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Golongan dengan nilai NamaGolongan = Assets	2021-04-26 11:04:34.062969+07
+d5d85034-0559-4613-8b17-00be328ce3f9	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Golongan dengan nilai NamaGolongan = Non Aset	2021-04-26 11:05:36.535164+07
+3717a9ab-52a2-46af-b250-786953c22267	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Kelompok dengan nilai NamaKelompok = kelompok, KodeGol = 1c2d12d8-9022-42ae-bec4-cf9486ad2bf2 dan termasuk ke dalam golongan dengan NamaGolongan = Assets	2021-04-26 11:06:03.276665+07
+095b08a9-d481-430a-9617-13d6a356b9bd	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Sub kelompok dengan nilai NamaSub = sub, KodeKelompok = 0b732d4e-0d30-4165-b6c3-6ed9fb8a10d6 dan termasuk ke dalam kelompok dengan NamaKelompok = kelompok	2021-04-26 11:06:24.046443+07
+a3bafb99-517b-437c-ab7d-761401a5b686	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Barang dengan nilai KodeSub = fed419e1-6d78-4716-9cc2-e07e6bfb7c08 dan termasuk ke dalam sub_kelompok dengan NamaSub = sub	2021-04-26 11:06:46.77101+07
+3d61935b-07fc-44f4-b31a-5243f868993b	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Product dengan nilai Nama = nama, KodeBarang = 8df68126-4dbf-4220-aaae-a5521f15275c, Merek = asadf, Satuan = pcs, Deskripsi = lalalal dan termasuk ke dalam barang dengan NamaBarang = barang	2021-04-26 11:07:15.958499+07
+afc95fb1-b521-4417-bf33-b35a7b5cd2a9	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = 8712, Pengguna = asd, Ruang = asdasd, MasaManfaat = asd, Supplier = asd, HargaPerolehan = 6,776, StatusPerolehan = qwe, Lokasi = asdasd, Kondisi = baik, IsWaranty = true, NoKartuGaransi = fgdgh, JenisGaransi = gjjh, MasaGaransi = 2, NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang	2021-04-26 11:11:33.127707+07
+dce25efc-58c7-4aaf-baf0-9f9927f516df	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok non aset dengan nilai Nama = iyaiyadhagjshas, Merek = asadf, Satuan = pcs, Deskripsi = asdf, LokasiGudang = asdf, LokasiRak = asdf, JumlahStok = 1234, HargaRerata = 1234, SaldoMin = 1234 dan termasuk ke dalam barang dengan NamaBarang = dddd	2021-04-26 11:34:26.157325+07
+c234f54e-3fbc-426e-b9dc-ee05b5604ac5	11c6668f-ceeb-4d40-b1d0-c1718b397284	Update	Mengubah data Kartu stok aset dengan nilai HargaPerolehan = 6776 ke 6,776, Kondisi = baik ke Baik dan termasuk ke dalam barang dengan NamaBarang = barang	2021-04-26 11:46:15.644361+07
+f21cfc85-98ca-46e5-a4d6-deff8ca589b6	11c6668f-ceeb-4d40-b1d0-c1718b397284	Update	Mengubah data Kartu stok aset dengan nilai Kondisi = sadasd ke Rusak dan termasuk ke dalam barang dengan NamaBarang = dddd	2021-04-26 11:46:31.569281+07
+5d0278fb-636e-4833-80c2-072ad5080f54	11c6668f-ceeb-4d40-b1d0-c1718b397284	Update	Mengubah data Kartu stok aset dengan nilai HargaPerolehan = 6776 ke 6,776, StatusPerolehan = qwe ke Beli dan termasuk ke dalam barang dengan NamaBarang = barang	2021-04-26 11:47:53.819787+07
+539a5fc2-ac3b-4cfd-927a-ed00ac7d4d41	11c6668f-ceeb-4d40-b1d0-c1718b397284	Update	Mengubah data Kartu stok aset dengan nilai StatusPerolehan = qwe ke Hibah dan termasuk ke dalam barang dengan NamaBarang = dddd	2021-04-26 11:48:03.114825+07
+5486d3df-cf3f-4df2-b9de-07648561f866	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Kelompok dengan nilai NamaKelompok = kategori, KodeGol = b5671df4-a376-45c4-8471-91062f2d551f dan termasuk ke dalam golongan dengan NamaGolongan = Non Aset	2021-04-26 13:51:04.387608+07
+52f03e0b-831c-49fe-9b7e-8690cb1ad122	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Product dengan nilai Nama = Bagas, KodeBarang = 8df68126-4dbf-4220-aaae-a5521f15275c, Merek = Honda, Satuan = pcs, Deskripsi = keren dan termasuk ke dalam barang dengan NamaBarang = barang	2021-04-29 22:42:29.034448+07
+0f37ac9f-949b-47bb-85e9-f52361f6a02f	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Department dengan nilai NameShort = BAAK, NameLong = BAAK	2021-04-29 22:45:50.336514+07
+7a69f532-3928-4efd-911e-7da3174e1948	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Department dengan nilai NameShort = SDM, NameLong = Sumber Daya Manusia	2021-04-29 22:46:15.73337+07
+688853d0-a2f6-4526-800a-1d55d5fce97d	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Gedung dengan nilai NamaGedung = Alfian, ThnPembangunan = 2011, LuasGedung = 2000, AlamatGedung = alamat, JmlLantai = 3, JmlRuangan = 30	2021-04-29 22:46:50.14159+07
+b050c0b0-8f03-45b9-9bc0-82114ececb85	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Gedung dengan nilai NamaGedung = Pasca, ThnPembangunan = 2012, LuasGedung = 2000, AlamatGedung = 20, JmlLantai = 2, JmlRuangan = 20	2021-04-29 22:47:26.589364+07
+5948b039-b546-4413-ab3a-93104e1574f1	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Ruangan dengan nilai GedungId = 963db26e-4c01-4120-b0bf-9582258cc5be, Nama = A1, PosisiRuangan = asd, UkuranRuangan = 12, KapasitasRuangan = 12	2021-04-29 22:47:56.710812+07
+3b30c233-55d4-4ea8-8625-11bb3d4f4b60	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Ruangan dengan nilai GedungId = 5b896f43-208e-4821-9e10-b456e94fae41, Nama = P1, PosisiRuangan = asd, UkuranRuangan = 213, KapasitasRuangan = 213	2021-04-29 22:48:22.311497+07
+09c7f2f0-810a-4393-9891-10331ca8590d	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Golongan dengan nilai NamaGolongan = Aset	2021-04-29 22:49:58.740352+07
+e75018c1-8efb-4c8c-9a66-785cc92ddec3	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Golongan dengan nilai NamaGolongan = Non-Aset	2021-04-29 22:50:16.782984+07
+95d1c94f-1109-4487-b36e-86eb12939bdd	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Kelompok dengan nilai NamaKelompok = kelompok 1, KodeGol = 38057aa5-3bd5-41fd-b596-6fb24b7330e5 dan termasuk ke dalam golongan dengan NamaGolongan = Aset	2021-04-29 22:50:33.640259+07
+5bafaafe-8567-4fe0-a90a-1b1f7e87c100	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Kelompok dengan nilai NamaKelompok = kelompok 2, KodeGol = b5671df4-a376-45c4-8471-91062f2d551f dan termasuk ke dalam golongan dengan NamaGolongan = Non Aset	2021-04-29 22:50:45.876728+07
+67def31c-3f2f-4430-b4d5-056f92881173	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Sub kelompok dengan nilai NamaSub = sub kelompok1, KodeKelompok = 44fcb833-cd2d-4013-b5c7-f2c2704b2a18 dan termasuk ke dalam kelompok dengan NamaKelompok = kelompok 1	2021-04-29 22:50:57.944417+07
+9c184873-40f2-418f-b5ad-7a58dc9c56aa	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Sub kelompok dengan nilai NamaSub = sub kelompok2, KodeKelompok = 081a236e-1398-43b4-b714-94e9add2a0bd dan termasuk ke dalam kelompok dengan NamaKelompok = kelompok 2	2021-04-29 22:51:07.585306+07
+be1a28bd-bb8d-4e3b-a399-4b4566f3980e	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Barang dengan nilai KodeSub = e8ebd8c7-d4a9-47b6-a4f6-f13f869c9001 dan termasuk ke dalam sub_kelompok dengan NamaSub = sub kelompok1	2021-04-29 22:51:18.208211+07
+383adbd5-6abc-4efd-9a58-4426d382e7df	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Barang dengan nilai KodeSub = 4fdd759e-ae6d-41f6-8e91-d4e6fffb642e dan termasuk ke dalam sub_kelompok dengan NamaSub = sub kelompok2	2021-04-29 22:51:30.521802+07
+a2f660a0-b18d-4b74-b939-bda245c66c92	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Product dengan nilai Nama = Produk 1, KodeBarang = 13a63d49-2757-4db8-8e28-dc9256508f67, Merek = m1, Satuan = pcs, Deskripsi = a dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-29 22:51:49.979245+07
+78851389-b794-4bd6-bd8f-0c5571dfc5b2	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Product dengan nilai Nama = Produk 2, KodeBarang = a6e8f7d8-e3f6-493e-a6ce-575a1ac335c6, Merek = aa, Satuan = pcs, Deskripsi = qqqqq dan termasuk ke dalam barang dengan NamaBarang = barang 2	2021-04-29 22:52:08.61741+07
+2cbb3a01-c59f-4212-b186-6010aeb6bde9	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = Dghh, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = Ddgh, Supplier = Dfhh, HargaPerolehan = 3,467, StatusPerolehan = Beli, Lokasi = Bbbb, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-29 23:09:01.076241+07
+7ee499e4-9e77-4651-a082-67e46301c3e6	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = Dghh, Ruang = aa916c58-14a3-4fff-8b12-ea9e05943842, MasaManfaat = Ddgh, Supplier = Dfhh, HargaPerolehan = 3,467, StatusPerolehan = Beli, Lokasi = Fghh, Kondisi = Rusak, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-29 23:16:24.674838+07
+7050a6e4-a0b3-4b35-a2cf-a47934dff240	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = peng, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = m, Supplier = s, HargaPerolehan = 20,000, StatusPerolehan = Hibah, Lokasi = l, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 04:07:56.456029+07
+a4ae4c67-886d-4125-9c63-002c6e6b939a	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = peng, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = m, Supplier = s, HargaPerolehan = 200,000, StatusPerolehan = Beli, Lokasi = l, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 05:48:15.182635+07
+aab1a74f-49d1-4056-9487-1d0fb721975a	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = bagas, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = m, Supplier = s, HargaPerolehan = 100,000, StatusPerolehan = Beli, Lokasi = l, Kondisi = Rusak, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 05:50:29.332897+07
+161ba065-9d06-4705-8e2b-6d9c424c9301	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Menambahkan data Kartu stok aset dengan nilai NoInventaris = 0003-BAAK-IV-2021, HargaPerolehan = 3467, MasaManfaat = Ddgh, Supplier = Dfhh, Pengguna = Dghh, NoPo = , StatusPerolehan = Beli, Lokasi = Bbbb, Kondisi = Baik, IsWaranty = 	2021-04-30 05:54:29.721562+07
+b3902837-2968-4911-b1c2-9e35d6ff71f8	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Menambahkan data Kartu stok aset dengan nilai NoInventaris = 0001-BAAK-IV-2021, HargaPerolehan = 123, MasaManfaat = asd, Supplier = asd, Pengguna = asd, NoPo = asd, StatusPerolehan = Hibah, Lokasi = asdasd, Kondisi = Rusak, IsWaranty = 	2021-04-30 05:54:35.83932+07
+df808d41-0e71-4c28-bd95-a0d73237e365	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Menambahkan data Kartu stok aset dengan nilai NoInventaris = 0001-SDM-IV-2021, HargaPerolehan = 3467, MasaManfaat = Ddgh, Supplier = Dfhh, Pengguna = Dghh, NoPo = , StatusPerolehan = Beli, Lokasi = Fghh, Kondisi = Rusak, IsWaranty = 	2021-04-30 05:54:40.410562+07
+40c8c9c2-4357-4d00-a2ef-86bf70b0a5f6	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Menambahkan data Kartu stok aset dengan nilai NoInventaris = 0002-BAAK-IV-2021, HargaPerolehan = 6776, MasaManfaat = asd, Supplier = asd, Pengguna = asd, NoPo = 8712, StatusPerolehan = Beli, Lokasi = asdasd, Kondisi = Baik, IsWaranty = 1	2021-04-30 05:54:44.868625+07
+b3545e84-251b-4797-9365-980ba12d2b97	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Menambahkan data Kartu stok aset dengan nilai NoInventaris = 0002-SDM-IV-2021, HargaPerolehan = 20000, MasaManfaat = m, Supplier = s, Pengguna = peng, NoPo = , StatusPerolehan = Hibah, Lokasi = l, Kondisi = Baik, IsWaranty = 	2021-04-30 05:54:48.739182+07
+4b38bf52-8449-404c-b068-c4c607bc7ab0	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = Bagas, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = 2, Supplier = Vendor, HargaPerolehan = 3,467, StatusPerolehan = Beli, Lokasi = Basing, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:19:30.279165+07
+f777f02e-f0c0-4b9d-b548-0a58428b671c	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = Bagas, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = 2, Supplier = Vendor, HargaPerolehan = 3,467, StatusPerolehan = Beli, Lokasi = Basing, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:28:52.506472+07
+ea3d19e3-5a1f-4c39-85a9-07766984e8bb	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = asd, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = asd, Supplier = asd, HargaPerolehan = 123, StatusPerolehan = Beli, Lokasi = asd, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:28:58.465286+07
+04023c22-3376-4df7-a252-7711d1bb229a	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = Hshs, Pengguna = Hshs, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = Bs, Supplier = Vendor, HargaPerolehan = 3,467, StatusPerolehan = Beli, Lokasi = Basing, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:31:00.860601+07
+89f621e3-63a7-4750-ac32-f95da0179aab	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = asd, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = asd, Supplier = asd, HargaPerolehan = 123, StatusPerolehan = Beli, Lokasi = asd, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:31:27.420889+07
+a4b34030-ca4c-4dd7-9bb4-827888b8cd80	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok aset dengan nilai NoPo = , Pengguna = asd, Ruang = 44325543-bc38-4877-bdd5-afb1a8ae59b8, MasaManfaat = asd, Supplier = asd, HargaPerolehan = 123, StatusPerolehan = Hibah, Lokasi = asd, Kondisi = Baik, NoKartuGaransi = , JenisGaransi = , MasaGaransi = , NamaStnk = , AlamatStnk = , Peruntukan =  dan termasuk ke dalam barang dengan NamaBarang = barang 1	2021-04-30 14:34:56.113077+07
+2e8020a3-117b-49ad-aa50-c13d1610470e	11c6668f-ceeb-4d40-b1d0-c1718b397284	Delete	Mengahapus data Kartu stok non aset dengan nilai LokasiGudang = asdf, LokasiRak = asdf, Satuan = pcs, JumlahStok = 1234, HargaRerata = 1234, SaldoMin = 1234, Nama = iyaiyadhagjshas, Gambar = -, Merek = asadf, Deskripsi = asdf	2021-04-30 15:23:34.460401+07
+96c58208-3c0c-4621-b6ac-80a4ac907b8b	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Kelompok dengan nilai NamaKelompok = non aset, KodeGol = 1b854a8d-34b9-4118-9949-a5062f2fb586 dan termasuk ke dalam golongan dengan NamaGolongan = Non-Aset	2021-04-30 15:28:02.14417+07
+20f743bc-9292-4fad-a1b4-e363b348569c	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Sub kelompok dengan nilai NamaSub = non aset, KodeKelompok = 6d770262-9a93-4ce4-a6b1-bdfa84a4159d dan termasuk ke dalam kelompok dengan NamaKelompok = non aset	2021-04-30 15:28:20.581141+07
+cfb9ed3c-4a4c-4cee-a1f1-cff0ebe7fd7f	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Barang dengan nilai KodeSub = 122d151f-376d-488a-848c-77391a59d0d3 dan termasuk ke dalam sub_kelompok dengan NamaSub = non aset	2021-04-30 15:28:35.105773+07
+6ee0f74b-148f-4fad-842d-8c8da6f47ace	cce2501b-8cbb-42d0-a265-e64245f59ed9	Insert	Menambahkan data Product dengan nilai Nama = non aset, KodeBarang = f671e7c7-140d-48a1-b941-c85472e489fb, Merek = non aset, Satuan = pcs, Deskripsi = non aset dan termasuk ke dalam barang dengan NamaBarang = non aset	2021-04-30 15:29:05.744794+07
+162d6589-098c-4d80-9fc6-8ddcecdc441b	11c6668f-ceeb-4d40-b1d0-c1718b397284	Insert	Menambahkan data Kartu stok non aset dengan nilai LokasiGudang = asd, LokasiRak = asd, JumlahStok = 213, HargaRerata = 32,232, SaldoMin = 123123 dan termasuk ke dalam product dengan Nama = non aset	2021-04-30 15:29:45.145642+07
+\.
+
+
+--
+-- TOC entry 2997 (class 0 OID 16940)
+-- Dependencies: 205
+-- Data for Name: kartu_garansi; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.kartu_garansi ("noKartuGaransi", "noInventaris", "jenisGaransi", "masaGaransi", "createdAt", "updatedAt") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2998 (class 0 OID 16950)
+-- Dependencies: 206
+-- Data for Name: kartu_stok_aset; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.kartu_stok_aset ("noInventaris", "hargaPerolehan", "masaManfaat", supplier, "createdAt", "updatedAt", pengguna, "isShow", "noPo", "statusPerolehan", lokasi, kondisi, "isWaranty", "productId", "kodeRuang") FROM stdin;
+0004-BAAK-IV-2021	200000	m	s	2021-04-30 05:48:15+07	2021-04-30 05:48:15.175828+07	peng	\N		Beli	l	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0005-BAAK-IV-2021	100000	m	s	2021-04-30 05:50:29+07	2021-04-30 05:50:29.327226+07	bagas	\N		Beli	l	Rusak	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0001-SDM-IV-2021	3467	2	Vendor	2021-04-30 14:19:30+07	2021-04-30 14:19:30.268701+07	Bagas	\N		Beli	Basing	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0006-BAAK-IV-2021	3467	2	Vendor	2021-04-30 14:28:52+07	2021-04-30 14:28:52.501935+07	Bagas	\N		Beli	Basing	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0007-BAAK-IV-2021	123	asd	asd	2021-04-30 14:28:58+07	2021-04-30 14:28:58.460229+07	asd	\N		Beli	asd	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0002-SDM-IV-2021	3467	Bs	Vendor	2021-04-30 14:31:00+07	2021-04-30 14:31:00.855654+07	Hshs	\N	Hshs	Beli	Basing	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0008-BAAK-IV-2021	123	asd	asd	2021-04-30 14:31:27+07	2021-04-30 14:31:27.415324+07	asd	\N		Beli	asd	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+0003-SDM-IV-2021	123	asd	asd	2021-04-30 14:34:56+07	2021-04-30 14:34:56.108836+07	asd	\N		Hibah	asd	Baik	\N	571d9dc1-8f04-40d0-81b3-359a8dd442e5	44325543-bc38-4877-bdd5-afb1a8ae59b8
+\.
+
+
+--
+-- TOC entry 2999 (class 0 OID 16960)
+-- Dependencies: 207
+-- Data for Name: kartu_stok_non_aset; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.kartu_stok_non_aset (id, "lokasiGudang", "lokasiRak", satuan, "jumlahStok", "hargaRerata", "saldoMin", "createdAt", "updatedAt", "productId") FROM stdin;
+9ac1ee40-f510-42a0-9908-beb3d2b59039	asd	asd	pcs	213	32232	123123	2021-04-30 15:29:45+07	2021-04-30 15:29:45+07	8f1bc78a-a95b-4dd2-b3a1-a7cc56dc5940
+\.
+
+
+--
+-- TOC entry 3003 (class 0 OID 17002)
+-- Dependencies: 211
+-- Data for Name: kelompok; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.kelompok (id, "namaKelompok", "createdAt", "updatedAt", "kodeGol") FROM stdin;
+fbcdd14a-303c-4530-8bfd-63881260bb22	asd	2021-04-18 18:17:25+07	2021-04-18 18:17:25+07	d307a55a-03f0-4d5b-9b55-ccc42e07f3ea
+02d90576-c8d8-4397-8c72-c5418229aecd	12345	2021-04-22 03:15:51+07	2021-04-22 04:09:03+07	d6e258ff-719a-4fb5-95ac-a5290f9a765f
+0b732d4e-0d30-4165-b6c3-6ed9fb8a10d6	kelompok	2021-04-26 11:06:03+07	2021-04-26 11:06:03+07	1c2d12d8-9022-42ae-bec4-cf9486ad2bf2
+cb174537-1fdc-4ec0-bd54-dd81bf6cac91	kategori	2021-04-26 13:51:04+07	2021-04-26 13:51:04+07	b5671df4-a376-45c4-8471-91062f2d551f
+44fcb833-cd2d-4013-b5c7-f2c2704b2a18	kelompok 1	2021-04-29 22:50:33+07	2021-04-29 22:50:33+07	38057aa5-3bd5-41fd-b596-6fb24b7330e5
+081a236e-1398-43b4-b714-94e9add2a0bd	kelompok 2	2021-04-29 22:50:45+07	2021-04-29 22:50:45+07	b5671df4-a376-45c4-8471-91062f2d551f
+6d770262-9a93-4ce4-a6b1-bdfa84a4159d	non aset	2021-04-30 15:28:02+07	2021-04-30 15:28:02+07	1b854a8d-34b9-4118-9949-a5062f2fb586
+\.
+
+
+--
+-- TOC entry 3000 (class 0 OID 16971)
+-- Dependencies: 208
+-- Data for Name: ksa_kendaraan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ksa_kendaraan (id, "namaStnk", "alamatStnk", "createdAt", "updatedAt", ksa, peruntukan) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3001 (class 0 OID 16982)
+-- Dependencies: 209
+-- Data for Name: ksa_nomor; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ksa_nomor (kode, nama, nomor, "createdAt", "updatedAt", ksa) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3006 (class 0 OID 17032)
+-- Dependencies: 214
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product (id, nama, gambar, merek, satuan, deskripsi, "createdAt", "updatedAt", "kodeBarang") FROM stdin;
+6b0e09aa-bdcb-4f7f-ae18-ce1e88d7dc36	ayla	-	aa	unit	qqqqq	2021-04-18 21:12:55+07	2021-04-18 21:12:55.836047+07	a9eaa183-abfa-4d27-91d5-4d8cb53c0397
+28354228-db2c-442f-b53d-51cc9772331b	Honda Jazz	-	Honda	unit	keren	2021-04-18 23:24:19+07	2021-04-18 23:24:51+07	a9eaa183-abfa-4d27-91d5-4d8cb53c0397
+e317c4a0-19db-46cf-bad5-dd7cb9ed9335	iyaiya	-	asadf	pack	asdf	2021-04-22 20:45:52+07	2021-04-22 20:45:52+07	a9eaa183-abfa-4d27-91d5-4d8cb53c0397
+b062f515-57a9-44b1-b45a-268fd71c58a9	nama	-	asadf	pcs	lalalal	2021-04-26 11:07:15+07	2021-04-26 11:07:15+07	8df68126-4dbf-4220-aaae-a5521f15275c
+43708188-38dc-4d5f-93b7-4d586683c8ba	Bagas	-	Honda	pcs	keren	2021-04-29 22:42:29+07	2021-04-29 22:42:29+07	8df68126-4dbf-4220-aaae-a5521f15275c
+571d9dc1-8f04-40d0-81b3-359a8dd442e5	Produk 1	-	m1	pcs	a	2021-04-29 22:51:49+07	2021-04-29 22:51:49+07	13a63d49-2757-4db8-8e28-dc9256508f67
+cc8d9611-893f-4c4f-8032-51ffc1b2153a	Produk 2	-	aa	pcs	qqqqq	2021-04-29 22:52:08+07	2021-04-29 22:52:08+07	a6e8f7d8-e3f6-493e-a6ce-575a1ac335c6
+8f1bc78a-a95b-4dd2-b3a1-a7cc56dc5940	non aset	-	non aset	pcs	non aset	2021-04-30 15:29:05+07	2021-04-30 15:29:05+07	f671e7c7-140d-48a1-b941-c85472e489fb
+\.
+
+
+--
+-- TOC entry 3007 (class 0 OID 17042)
+-- Dependencies: 215
+-- Data for Name: product_kendaraan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_kendaraan (id, tipe, "bahanBakar", "thPembuatan", warna, hp, "createdAt", "updatedAt", "productId") FROM stdin;
+fdbed12d-9907-461a-987c-9aee9868ffc3	city car	bensin	2020	merah	1400	2021-04-18 23:24:19+07	2021-04-18 23:24:51+07	28354228-db2c-442f-b53d-51cc9772331b
+\.
+
+
+--
+-- TOC entry 3009 (class 0 OID 17214)
+-- Dependencies: 217
+-- Data for Name: ruangan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ruangan (id, nama, "jenisRuangan", "posisiRuangan", "ukuranRuangan", "kapasitasRuangan", "createdAt", "updatedAt", "gedungId") FROM stdin;
+44325543-bc38-4877-bdd5-afb1a8ae59b8	A1	Kantor	asd	12	12	2021-04-29 22:47:56.689629+07	2021-04-29 22:47:56.689629+07	963db26e-4c01-4120-b0bf-9582258cc5be
+aa916c58-14a3-4fff-8b12-ea9e05943842	P1	kuliah	asd	213	213	2021-04-29 22:48:22.290999+07	2021-04-29 22:48:22.290999+07	5b896f43-208e-4821-9e10-b456e94fae41
+\.
+
+
+--
+-- TOC entry 3004 (class 0 OID 17012)
+-- Dependencies: 212
+-- Data for Name: sub_kelompok; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sub_kelompok (id, "namaSub", "createdAt", "updatedAt", "kodeKelompok") FROM stdin;
+875713cc-9856-41f0-98bb-5cb783f48690	asdasdasd	2021-04-18 19:09:35+07	2021-04-18 19:09:35+07	fbcdd14a-303c-4530-8bfd-63881260bb22
+fed419e1-6d78-4716-9cc2-e07e6bfb7c08	sub	2021-04-26 11:06:24+07	2021-04-26 11:06:24+07	0b732d4e-0d30-4165-b6c3-6ed9fb8a10d6
+e8ebd8c7-d4a9-47b6-a4f6-f13f869c9001	sub kelompok1	2021-04-29 22:50:57+07	2021-04-29 22:50:57+07	44fcb833-cd2d-4013-b5c7-f2c2704b2a18
+4fdd759e-ae6d-41f6-8e91-d4e6fffb642e	sub kelompok2	2021-04-29 22:51:07+07	2021-04-29 22:51:07+07	081a236e-1398-43b4-b714-94e9add2a0bd
+122d151f-376d-488a-848c-77391a59d0d3	non aset	2021-04-30 15:28:20+07	2021-04-30 15:28:20+07	6d770262-9a93-4ce4-a6b1-bdfa84a4159d
+\.
+
+
+--
+-- TOC entry 2995 (class 0 OID 16887)
+-- Dependencies: 203
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, first_name, last_name, email, password, "isActive", profile, level, publish, create_at, update_at) FROM stdin;
+d452bc17-75d4-4545-b6d4-864f2c39d872	Diki Rahmad	Sandi	dikirahmadsandi@outlook.com	202cb962ac59075b964b07152d234b70	Yes	default.png	Super_Admin	Yes	2021-04-17 21:10:04.384117+07	2021-04-17 21:10:04.384117+07
+cce2501b-8cbb-42d0-a265-e64245f59ed9	Bagas Ageng	Sandoko	bagas.sageng@gmail.com	202cb962ac59075b964b07152d234b70	Yes	4537762ffdc5dbe10123ded881d030e1.JPG	Administrator	Yes	2021-04-17 21:53:35.907304+07	2021-04-17 21:53:35.907304+07
+11c6668f-ceeb-4d40-b1d0-c1718b397284	Guest	.	guest@outlook.com	202cb962ac59075b964b07152d234b70	Yes	default.png	Guest	Yes	2021-04-20 00:16:22.743701+07	2021-04-20 00:16:22.743701+07
+\.
+
+
+--
+-- TOC entry 2845 (class 2606 OID 17031)
+-- Name: barang barang_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.barang
+    ADD CONSTRAINT barang_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2855 (class 2606 OID 17231)
+-- Name: department department_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department
+    ADD CONSTRAINT department_pkey PRIMARY KEY ("nameShort");
+
+
+--
+-- TOC entry 2851 (class 2606 OID 17233)
+-- Name: gedung gedung_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gedung
+    ADD CONSTRAINT gedung_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2839 (class 2606 OID 17001)
+-- Name: golongan golongan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.golongan
+    ADD CONSTRAINT golongan_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2827 (class 2606 OID 16905)
+-- Name: history history_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.history
+    ADD CONSTRAINT history_pkey PRIMARY KEY (history_id);
+
+
+--
+-- TOC entry 2829 (class 2606 OID 16949)
+-- Name: kartu_garansi kartu_garansi_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_garansi
+    ADD CONSTRAINT kartu_garansi_pkey PRIMARY KEY ("noKartuGaransi");
+
+
+--
+-- TOC entry 2831 (class 2606 OID 16959)
+-- Name: kartu_stok_aset kartu_stok_aset_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_stok_aset
+    ADD CONSTRAINT kartu_stok_aset_pkey PRIMARY KEY ("noInventaris");
+
+
+--
+-- TOC entry 2833 (class 2606 OID 16970)
+-- Name: kartu_stok_non_aset kartu_stok_non_aset_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_stok_non_aset
+    ADD CONSTRAINT kartu_stok_non_aset_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2841 (class 2606 OID 17011)
+-- Name: kelompok kelompok_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kelompok
+    ADD CONSTRAINT kelompok_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2835 (class 2606 OID 16981)
+-- Name: ksa_kendaraan ksa_kendaraan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ksa_kendaraan
+    ADD CONSTRAINT ksa_kendaraan_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2837 (class 2606 OID 16991)
+-- Name: ksa_nomor ksa_nomor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ksa_nomor
+    ADD CONSTRAINT ksa_nomor_pkey PRIMARY KEY (kode);
+
+
+--
+-- TOC entry 2849 (class 2606 OID 17052)
+-- Name: product_kendaraan product_kendaraan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_kendaraan
+    ADD CONSTRAINT product_kendaraan_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2847 (class 2606 OID 17041)
+-- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT product_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2853 (class 2606 OID 17235)
+-- Name: ruangan ruangan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ruangan
+    ADD CONSTRAINT ruangan_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2843 (class 2606 OID 17021)
+-- Name: sub_kelompok sub_kelompok_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sub_kelompok
+    ADD CONSTRAINT sub_kelompok_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2825 (class 2606 OID 16896)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 2865 (class 2606 OID 17078)
+-- Name: barang barang_kodeSub_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.barang
+    ADD CONSTRAINT "barang_kodeSub_fkey" FOREIGN KEY ("kodeSub") REFERENCES public.sub_kelompok(id);
+
+
+--
+-- TOC entry 2856 (class 2606 OID 17053)
+-- Name: history history_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.history
+    ADD CONSTRAINT history_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- TOC entry 2857 (class 2606 OID 17103)
+-- Name: kartu_garansi kartu_garansi_noInventaris_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_garansi
+    ADD CONSTRAINT "kartu_garansi_noInventaris_fkey" FOREIGN KEY ("noInventaris") REFERENCES public.kartu_stok_aset("noInventaris");
+
+
+--
+-- TOC entry 2859 (class 2606 OID 17241)
+-- Name: kartu_stok_aset kartu_stok_aset_kodeRuang_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_stok_aset
+    ADD CONSTRAINT "kartu_stok_aset_kodeRuang_fkey" FOREIGN KEY ("kodeRuang") REFERENCES public.ruangan(id);
+
+
+--
+-- TOC entry 2858 (class 2606 OID 17098)
+-- Name: kartu_stok_aset kartu_stok_aset_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_stok_aset
+    ADD CONSTRAINT "kartu_stok_aset_productId_fkey" FOREIGN KEY ("productId") REFERENCES public.product(id);
+
+
+--
+-- TOC entry 2860 (class 2606 OID 17093)
+-- Name: kartu_stok_non_aset kartu_stok_non_aset_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kartu_stok_non_aset
+    ADD CONSTRAINT "kartu_stok_non_aset_productId_fkey" FOREIGN KEY ("productId") REFERENCES public.product(id);
+
+
+--
+-- TOC entry 2863 (class 2606 OID 17068)
+-- Name: kelompok kelompok_kodeGol_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.kelompok
+    ADD CONSTRAINT "kelompok_kodeGol_fkey" FOREIGN KEY ("kodeGol") REFERENCES public.golongan(id);
+
+
+--
+-- TOC entry 2861 (class 2606 OID 17058)
+-- Name: ksa_kendaraan ksa_kendaraan_ksa_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ksa_kendaraan
+    ADD CONSTRAINT ksa_kendaraan_ksa_fkey FOREIGN KEY (ksa) REFERENCES public.kartu_stok_aset("noInventaris");
+
+
+--
+-- TOC entry 2862 (class 2606 OID 17063)
+-- Name: ksa_nomor ksa_nomor_ksa_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ksa_nomor
+    ADD CONSTRAINT ksa_nomor_ksa_fkey FOREIGN KEY (ksa) REFERENCES public.kartu_stok_aset("noInventaris");
+
+
+--
+-- TOC entry 2867 (class 2606 OID 17088)
+-- Name: product_kendaraan product_kendaraan_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_kendaraan
+    ADD CONSTRAINT "product_kendaraan_productId_fkey" FOREIGN KEY ("productId") REFERENCES public.product(id);
+
+
+--
+-- TOC entry 2866 (class 2606 OID 17083)
+-- Name: product product_kodeBarang_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT "product_kodeBarang_fkey" FOREIGN KEY ("kodeBarang") REFERENCES public.barang(id);
+
+
+--
+-- TOC entry 2868 (class 2606 OID 17236)
+-- Name: ruangan ruangan_gedungId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ruangan
+    ADD CONSTRAINT "ruangan_gedungId_fkey" FOREIGN KEY ("gedungId") REFERENCES public.gedung(id);
+
+
+--
+-- TOC entry 2864 (class 2606 OID 17073)
+-- Name: sub_kelompok sub_kelompok_kodeKelompok_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sub_kelompok
+    ADD CONSTRAINT "sub_kelompok_kodeKelompok_fkey" FOREIGN KEY ("kodeKelompok") REFERENCES public.kelompok(id);
+
+
+-- Completed on 2021-05-02 10:38:40
+
+--
+-- PostgreSQL database dump complete
+--
+

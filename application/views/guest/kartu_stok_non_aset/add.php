@@ -16,8 +16,11 @@
 										<option value="">Pilih Produk</option>
 										<?php
 										foreach ($produk as $value) {
-											$selected = ($value['id'] == $this->input->post('productId')) ? ' selected="selected"' : "";
-											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
+											$cek = view('kartu_stok_non_aset', ['productId' => $value['id']], 'id');
+											if ($cek == null) {
+												$selected = ($value['id'] == $this->input->post('productId')) ? ' selected="selected"' : "";
+												echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
+											}
 										}
 										?>
 									</select>

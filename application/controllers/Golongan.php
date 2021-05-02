@@ -16,30 +16,30 @@ class Golongan extends CI_Controller
         $data['_view'] = 'administrator/golongan/index';
         $this->load->view('administrator/layouts/main', $data);
     }
-    // function add()
-    // {
-    //     $this->load->library('form_validation');
-    //     $this->form_validation->set_rules('namaGolongan', 'golongan', 'required|max_length[100]');
-    //     if ($this->form_validation->run()) {
-    //         $params = array(
-    //             'namaGolongan' => $this->input->post('namaGolongan'),
-    //             'createdAt' => date('Y-m-d H:i:s'),
-    //             'updatedAt' => date('Y-m-d H:i:s')
-    //         );
-    //         $text = text('Insert', 'golongan', ['namaGolongan'], [], $_POST, []);
+    function add()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('namaGolongan', 'golongan', 'required|max_length[100]');
+        if ($this->form_validation->run()) {
+            $params = array(
+                'namaGolongan' => $this->input->post('namaGolongan'),
+                'createdAt' => date('Y-m-d H:i:s'),
+                'updatedAt' => date('Y-m-d H:i:s')
+            );
+            $text = text('Insert', 'golongan', ['namaGolongan'], [], $_POST, []);
 
-    //         $golongan_id = $this->Golongan_model->add_golongan($params, $text);
-    //         if ($golongan_id) {
-    //             alert('success', 'Berhasil...', 'Berhasil menambahkan data');
-    //         } else {
-    //             alert('error', 'Gagal...', 'Gagal menambahkan data');
-    //         }
-    //         redirect('golongan/index');
-    //     } else {
-    //         $data['_view'] = 'administrator/golongan/add';
-    //         $this->load->view('administrator/layouts/main', $data);
-    //     }
-    // }
+            $golongan_id = $this->Golongan_model->add_golongan($params, $text);
+            if ($golongan_id) {
+                alert('success', 'Berhasil...', 'Berhasil menambahkan data');
+            } else {
+                alert('error', 'Gagal...', 'Gagal menambahkan data');
+            }
+            redirect('golongan/index');
+        } else {
+            $data['_view'] = 'administrator/golongan/add';
+            $this->load->view('administrator/layouts/main', $data);
+        }
+    }
     // function edit($id)
     // {
     //     $data['golongan'] = $this->Golongan_model->get_golongan($id);

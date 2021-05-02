@@ -9,14 +9,15 @@ class Kartu_stok_aset extends CI_Controller
         }
         $this->load->model('Kartu_stok_aset_model');
         $this->load->model('Produk_model');
-        $this->load->model('Department_model'); 
-        $this->load->model('Gedung_model'); 
+        $this->load->model('Department_model');
+        $this->load->model('Gedung_model');
         $this->load->model('Global_model');
         $this->load->model('Ruangan_model');
     }
     function index()
     {
         $data['kartu_stok_aset_'] = $this->Kartu_stok_aset_model->get_all_kartu_stok_aset_();
+        // $data['base64'] = chunk_split(base64_encode(file_get_contents(base_url('assets/pdf/') . '0004-BAAK-IV-2021.pdf')));
         $data['_view'] = 'guest/kartu_stok_aset/index';
         $this->load->view('guest/layouts/main', $data);
     }
@@ -53,7 +54,7 @@ class Kartu_stok_aset extends CI_Controller
             $asset = array(
                 'productId' => $this->input->post('productId'),
                 'noInventaris' => $newInv,
-                'ruang' => $this->input->post('ruang'),
+                'kodeRuang' => $this->input->post('ruang'),
                 'hargaPerolehan' => str_replace(',', '', $this->input->post('hargaPerolehan')),
                 'masaManfaat' => $this->input->post('masaManfaat'),
                 'supplier' => $this->input->post('supplier'),
@@ -79,7 +80,7 @@ class Kartu_stok_aset extends CI_Controller
             $config['errorlog']     = './assets/'; //string, the default is application/logs/
             $config['imagedir']     = './assets/img/'; //direktori penyimpanan qr code
             $config['quality']      = true; //boolean, the default is true
-            $config['size']         = '1024'; //interger, the default is 1024
+            $config['size']         = '512'; //interger, the default is 1024
             $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
             $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
             $this->ciqrcode->initialize($config);
@@ -88,9 +89,19 @@ class Kartu_stok_aset extends CI_Controller
 
             $params['data'] = $newInv;
             $params['level'] = 'H';
-            $params['size'] = 10;
+            $params['size'] = 6;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name;
+            //buat pdf
             $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+            $this->load->library('pdf');
+            $pdf = new FPDF('L', 'mm', [30, 58]);
+            $pdf->SetMargins(2, 1, 0);
+            $pdf->AddPage();
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->Image($params['savename'], 20, 6.0, 20, 20);
+            $pdf->Cell(0, 5, $newInv, 0, 0, 'C');
+            $pdf->Output("F", "C:/xampp/htdocs/stok/assets/pdf/" . $newInv . ".pdf"); //simpan
+            //
             $text = text('Insert', 'kartu_stok_aset', ['namaStnk', 'alamatStnk', 'peruntukan', 'noKartuGaransi', 'jenisGaransi', 'noInventaris', 'masaGaransi', 'ruang', 'hargaPerolehan', 'masaManfaat', 'supplier', 'pengguna', 'noPo', 'statusPerolehan', 'lokasi', 'kondisi', 'isWaranty'], $relation, $_POST, []);
             $noInventaris = $this->Kartu_stok_aset_model->add_kartu_stok_aset($asset, $text);
             if ($this->input->post('isWaranty') == "true" && $this->input->post('noKartuGaransi') != '') {
@@ -135,6 +146,7 @@ class Kartu_stok_aset extends CI_Controller
             $data['gedung'] = $this->Gedung_model->get_all_gedung();
             $data['produk'] = $this->Produk_model->get_all_produk_asset();
             $data['department'] = $this->Department_model->get_all_department();
+
             $data['_view'] = 'guest/kartu_stok_aset/add';
             $this->load->view('guest/layouts/main', $data);
         }
@@ -177,7 +189,7 @@ class Kartu_stok_aset extends CI_Controller
                 $asset = array(
                     'productId' => $this->input->post('productId'),
                     'noInventaris' => $this->input->post('noInventaris'),
-                    'ruang' => $this->input->post('ruang'),
+                    'kodeRuang' => $this->input->post('ruang'),
                     'hargaPerolehan' => str_replace(',', '', $this->input->post('hargaPerolehan')),
                     'masaManfaat' => $this->input->post('masaManfaat'),
                     'supplier' => $this->input->post('supplier'),
@@ -299,7 +311,7 @@ class Kartu_stok_aset extends CI_Controller
                 }
                 redirect('kartu_stok_aset/index');
             } else {
-            $data['department'] = $this->Department_model->get_all_department();
+                $data['department'] = $this->Department_model->get_all_department();
 
                 $data['gedung'] = $this->Gedung_model->get_all_gedung();
                 $data['produk'] = $this->Produk_model->get_all_produk_();
@@ -316,7 +328,7 @@ class Kartu_stok_aset extends CI_Controller
             $cekGaransi = $this->Global_model->get_data('kartu_garansi', ['noInventaris' => $kartu_stok_aset['noInventaris']], false);
             $cekKendaraan = $this->Global_model->get_data('ksa_kendaraan', ['ksa' => $kartu_stok_aset['noInventaris']], false);
             $cekNomor = $this->Global_model->get_data('ksa_nomor', ['ksa' => $kartu_stok_aset['noInventaris']], false);
-            $da = array_merge($kartu_stok_aset, $cekGaransi, $cekKendaraan);
+            $da = array_merge((isset($kartu_stok_aset)) ? $kartu_stok_aset : [], (isset($cekGaransi)) ? $cekGaransi : [], (isset($cekKendaraan)) ? $cekKendaraan : [], (isset($cekNomor)) ? $cekNomor : []);
 
             if ($cekGaransi != null) {
                 $this->db->where(['noInventaris' => $id]);
@@ -362,12 +374,28 @@ class Kartu_stok_aset extends CI_Controller
     }
     function getruang()
     {
-        $ruangan = $this->db->get_where('ruangan',['gedungId' => $_POST['gedung']])->result_array();
+        $ruangan = $this->db->get_where('ruangan', ['gedungId' => $_POST['gedung']])->result_array();
         $html = '';
         foreach ($ruangan as $r) {
             $selected = ($r['id'] == $this->input->post('ruang')) ? ' selected="selected"' : "";
             $html .= '<option value="' . $r['id'] . '" ' . $selected . '>' . $r['nama'] . '</option>';
         }
         echo $html;
+    }
+    function getqrcode()
+    {
+        $path = base_url('assets/pdf/' . $_POST['inv'] . '.pdf');
+        $data = file_get_contents($path);
+        $b64Doc = base64_encode($data);
+        echo 'data:application/pdf;base64,' . $b64Doc;
+    }
+    function tes()
+    {
+        $path = base_url('assets/pdf/' . '0003-BAAK-IV-2021' . '.pdf');
+        // echo $path;
+        $data = file_get_contents($path);
+        // var_dump($data);
+        $b64Doc = base64_encode($data);
+        echo 'data:application/pdf;base64,' . $b64Doc;
     }
 }

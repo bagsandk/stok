@@ -8,6 +8,7 @@
                   <div class="card">
                       <div class="card-header">
                           <a href="<?= base_url('kartu_stok_aset/add') ?>" class="badge badge-success">Tambah</a>
+                          <!-- <a href="rawbt:data:application/pdf;base64,<?= $base64 ?>" class="badge badge-success">Test</a> -->
                       </div>
                       <div class="card-body">
                           <div class="table-responsive">
@@ -38,7 +39,8 @@
                                           <tr>
                                               <td><?php echo $no; ?></td>
                                               <td>
-                                                  <button type="button" class="btn btn-primary btn-sm" data-html="true" data-toggle="popover" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
+                                                  <button type="button" class="btn btn-primary btn-sm m-1" data-html="true" data-toggle="popover" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
+                                                  <a href="javascript:void(0)" data-id="<?= $t['noInventaris'] ?>" class="btn btn-sm btn-warning cetak" >Cetak</a>
                                               </td>
                                               <td><?= $t['noInventaris']; ?></td>
                                               <td><?= 'Rp ' . number_format($t['hargaPerolehan']); ?></td>

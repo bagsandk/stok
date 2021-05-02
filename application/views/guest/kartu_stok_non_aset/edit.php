@@ -15,8 +15,13 @@
 									<select name="productId" class="form-control select2">
 										<?php
 										foreach ($produk as $value) {
-											$selected = ($value['id'] == $kartu_stok_aset['productId']) ? ' selected="selected"' : "";
-											echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
+											$cek = view('kartu_stok_non_aset', ['productId' => $value['id']], 'id');
+											$selected = ($value['id'] == $kartu_stok_non_aset['productId']) ? ' selected="selected"' : "";
+											if ($selected) {
+												echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
+											} elseif ($cek == null) {
+												echo '<option value="' . $value['id'] . '" ' . $selected . '>' . $value['nama'] . ' | ' . $value['merek'] . ' | ' . $value['satuan'] . '</option>';
+											}
 										}
 										?>
 									</select>

@@ -177,8 +177,26 @@
                 },
                 url: "<?= base_url('kartu_stok_aset/getruang') ?>",
                 success: function(data) {
-                   $('#ruang').html(data);
+                    $('#ruang').html(data);
                 }
+            });
+        })
+        $('.cetak').click(function() {
+            let a = $(this).data('id');
+            console.log(a);
+            $.ajax({
+                type: "POST",
+                data: {
+                    inv: a
+                },
+                url: "<?= base_url('kartu_stok_aset/getqrcode') ?>",
+                // beforeSend: function() {
+                //     alert('sabar');
+                // },
+                success: function(data) {
+                    window.open('rawbt:' + data)
+                }
+
             });
         })
     </script>
