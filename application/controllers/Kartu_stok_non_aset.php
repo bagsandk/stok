@@ -155,4 +155,34 @@ class Kartu_stok_non_aset extends CI_Controller
             die;
         }
     }
+    function uploadgambar($id)
+    {
+        if (isset($_FILES["gambar"])) {
+            $config['upload_path'] = './assets/img/nonaset/';
+            $config['allowed_types'] = 'jpeg|jpg|png';
+            $config['max_size']     = '5000';
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('gambar')) {
+                $new = $this->upload->data('file_name');
+                $cek = $this->db->get_where('product', ['id' => $id])->row_array();
+                if ($cek) {
+                    $this->db->where('id', $id)
+                        ->update('product', ['gambar' => $new]);
+                    alert('success', 'Berhasil...', 'Berhasil menghapus data');
+                    redirect('kartu_stok_non_aset');
+                } else {
+                    alert('error', 'Gagal...', 'Produk Tidak ada');
+                    redirect('kartu_stok_non_aset');
+                }
+            } else {
+                alert('error', 'Gagal...', 'Format salah');
+                redirect('kartu_stok_non_aset');
+                die;
+            }
+        } else {
+            alert('error', 'Gagal...', 'Tidak ada data');
+            redirect('kartu_stok_non_aset');
+            die;
+        }
+    }
 }

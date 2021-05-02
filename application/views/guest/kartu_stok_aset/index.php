@@ -17,6 +17,7 @@
                                       <tr>
                                           <th>No</th>
                                           <th>QRCode</th>
+                                          <th>Gambar</th>
                                           <th>No Inventasis</th>
                                           <th>harga Perolehan</th>
                                           <th>Masa Manfaat</th>
@@ -40,7 +41,28 @@
                                               <td><?php echo $no; ?></td>
                                               <td>
                                                   <button type="button" class="btn btn-primary btn-sm m-1" data-html="true" data-toggle="popover" title="<?= $t['noInventaris']; ?>" data-content="<img class='img-responsive' src='<?= base_url('assets/img/' . $t['noInventaris'] . '.png') ?>'>">Detail</button>
-                                                  <a href="javascript:void(0)" data-id="<?= $t['noInventaris'] ?>" class="btn btn-sm btn-warning cetak" >Cetak</a>
+                                                  <a href="javascript:void(0)" data-id="<?= $t['noInventaris'] ?>" class="btn btn-sm btn-warning m-1 cetak">Cetak</a>
+                                              </td>
+                                              <td>
+                                                  <?php $gambar =  view('product', ['id' => $t['productId']], 'gambar') ?>
+                                                  <?php if ($gambar == '-') { ?>
+                                                      <?= form_open_multipart('kartu_stok_aset/uploadgambar/' . $t['productId']); ?>
+                                                      <label class="selectgroup-item">
+                                                          <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">
+                                                          <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-camera"></i></span>
+                                                      </label>
+                                                      <?= form_close(); ?>
+                                                  <?php } else { ?>
+                                                      <img width="80"  alt="image" src="<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid" data-html="true" data-toggle="popover" data-content="<img class='img-responsive' src='<?= base_url('assets/img/aset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>' width='240'>">
+                                                      <?= form_open_multipart('kartu_stok_aset/uploadgambar/' . $t['productId']); ?>
+                                                      <label class="selectgroup-item">
+                                                          <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">
+                                                          <span class="mt-2 badge badge-warning">
+                                                              Upload ulang
+                                                          </span>
+                                                      </label>
+                                                      <?= form_close(); ?>
+                                                  <?php } ?>
                                               </td>
                                               <td><?= $t['noInventaris']; ?></td>
                                               <td><?= 'Rp ' . number_format($t['hargaPerolehan']); ?></td>

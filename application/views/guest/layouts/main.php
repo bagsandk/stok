@@ -213,6 +213,10 @@
         var cleaveC = new Cleave('.number', {
             numeral: true,
         });
+
+        $('.popover-dismiss').popover({
+            trigger: 'focus'
+        })
     </script>
 
 

@@ -43,7 +43,27 @@
                                                 </div>
                                               </div>
                                               '><?php echo view('product', ['id' => $t['productId']], 'nama') ?></td>
-                                              <td><?php echo view('product', ['id' => $t['productId']], 'gambar') ?></td>
+                                              <td>
+                                                  <?php $gambar =  view('product', ['id' => $t['productId']], 'gambar') ?>
+                                                  <?php if ($gambar == '-') { ?>
+                                                      <?= form_open_multipart('kartu_stok_non_aset/uploadgambar/' . $t['productId']); ?>
+                                                      <label class="selectgroup-item">
+                                                          <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">
+                                                          <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-camera"></i></span>
+                                                      </label>
+                                                      <?= form_close(); ?>
+                                                  <?php } else { ?>
+                                                      <img width="80" alt="image" src="<?= base_url('assets/img/nonaset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>" class="img-fluid" data-html="true" data-toggle="popover" data-content="<img class='img-responsive' src='<?= base_url('assets/img/nonaset/' . view('product', ['id' => $t['productId']], 'gambar')) ?>' width='240'>">
+                                                      <?= form_open_multipart('kartu_stok_non_aset/uploadgambar/' . $t['productId']); ?>
+                                                      <label class="selectgroup-item">
+                                                          <input onchange="this.form.submit();" type="file" name="gambar" capture="camera" class="selectgroup-input" accept="image/*">
+                                                          <span class="mt-2 badge badge-warning">
+                                                              Upload ulang
+                                                          </span>
+                                                      </label>
+                                                      <?= form_close(); ?>
+                                                  <?php } ?>
+                                              </td>
                                               <td><?php echo view('product', ['id' => $t['productId']], 'merek') ?></td>
                                               <td><?= $t['lokasiGudang']; ?></td>
                                               <td><?= $t['lokasiRak']; ?></td>
